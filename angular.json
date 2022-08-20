@@ -55,6 +55,7 @@
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles.scss",
+              "src/styles-dark-mode.scss",
               "./node_modules/@remult/angular/input-styles.scss"
             ],
             "scripts": []
@@ -124,7 +125,8 @@
             ],
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
-              "src/styles.scss"
+              "src/styles.scss",
+              "src/styles-dark-mode.scss",
             ],
             "scripts": []
           }
