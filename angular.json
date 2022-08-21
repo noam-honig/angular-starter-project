@@ -7,6 +7,14 @@
   "newProjectRoot": "projects",
   "projects": {
     "angular-starter-project": {
+      "i18n": {
+        "sourceLocale": "en",
+        "locales": {
+          "de": "src/locale/messages.de.xlf",
+          "fr": "src/locale/messages.fr.xlf",
+          "it": "src/locale/messages.it.xlf"
+        }
+      },
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -61,6 +69,7 @@
           },
           "configurations": {
             "production": {
+              "localize": true,
               "budgets": [
                 {
                   "type": "initial",
@@ -88,6 +97,15 @@
               "extractLicenses": false,
               "sourceMap": true,
               "namedChunks": true
+            },
+            "de": {
+              "localize": ["de"]
+            },
+            "fr": {
+              "localize": ["fr"]
+            },
+            "it": {
+              "localize": ["it"]
             }
           },
           "defaultConfiguration": "production"
@@ -100,6 +118,15 @@
             },
             "development": {
               "browserTarget": "angular-starter-project:build:development"
+            },
+            "development-de": {
+              "browserTarget": "angular-starter-project:build:development,de"
+            },
+            "development-fr": {
+              "browserTarget": "angular-starter-project:build:development,fr"
+            },
+            "development-it": {
+              "browserTarget": "angular-starter-project:build:development,it"
             }
           },
           "defaultConfiguration": "development"

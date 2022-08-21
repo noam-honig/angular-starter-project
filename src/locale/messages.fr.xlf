@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="en" datatype="plaintext" original="ng2.template" target-language="fr">
+    <body>
+      <trans-unit id="1800557427031035865" datatype="html">
+        <source>Some random pagagraph that needs translation</source>
+        <target state="new">Une pagination aléatoire qui doit être traduite</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/home/home.component.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3849686677490757992" datatype="html">
+        <source>User <x id="PH" equiv-text="username"/> doesn't exist!</source>
+        <target state="new">User <x id="PH" equiv-text="username"/> doesn't exist!</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/users/SignInController.ts</context>
+          <context context-type="linenumber">29</context>
+        </context-group>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
