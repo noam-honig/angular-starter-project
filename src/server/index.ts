@@ -1,3 +1,4 @@
+import './global';
 import express from 'express';
 import sslRedirect from 'heroku-ssl-redirect'
 import swaggerUi from 'swagger-ui-express';

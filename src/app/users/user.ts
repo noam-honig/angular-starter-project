@@ -22,7 +22,7 @@ import { terms } from "../terms";
 export class User extends IdEntity {
     @Fields.string({
         validate: [Validators.required, Validators.uniqueOnBackend],
-        caption: terms.username
+        caption: $localize `User Name`
     })
     name = '';
     @Fields.string({ includeInApi: false })
