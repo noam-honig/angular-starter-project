@@ -4,8 +4,10 @@ import { BackendMethod, Remult } from 'remult';
 
 import { DialogService } from '../common/dialog';
 import { Roles } from './roles';
-import { GridSettings } from '@remult/angular/interfaces';
+
 import { terms } from '../terms';
+import { GridSettings } from 'common-ui-elements/interfaces';
+
 
 
 @Component({

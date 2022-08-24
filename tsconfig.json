@@ -23,7 +23,15 @@
     "lib": [
       "es2020",
       "dom"
-    ]
+    ],
+    "paths": {
+      "common-ui-elements": [
+        "src/app/common-ui-elements"
+      ],
+      "common-ui-elements/interfaces": [
+        "src/app/common-ui-elements/interfaces"
+      ],
+    }
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

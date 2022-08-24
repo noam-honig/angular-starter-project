@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
-import { DataAreaFieldsSetting, DataAreaSettings, IDataAreaSettings } from '@remult/angular/interfaces';
+import { DataAreaFieldsSetting, DataAreaSettings, IDataAreaSettings } from 'common-ui-elements/interfaces';
 import { getFields } from 'remult';
 import { terms } from '../../terms';
 

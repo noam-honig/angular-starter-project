@@ -16,7 +16,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
-import { RemultModule } from '@remult/angular';
+import { CommonUIElementsModule } from 'common-ui-elements';
 import { UsersComponent } from './users/users.component';
 import { HomeComponent } from './home/home.component';
 import { YesNoQuestionComponent } from './common/yes-no-question/yes-no-question.component';
@@ -48,7 +48,7 @@ import { AdminGuard } from "./users/AdminGuard";
     MatButtonModule,
     MatIconModule,
     MatMenuModule,
-    RemultModule
+    CommonUIElementsModule
   ],
   providers: [DialogService, AdminGuard],
   bootstrap: [AppComponent],

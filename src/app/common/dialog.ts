@@ -3,7 +3,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { Remult } from "remult";
 
 import { YesNoQuestionComponent } from "./yes-no-question/yes-no-question.component";
-import { openDialog } from "@remult/angular";
+import { openDialog } from "common-ui-elements";
 import { terms } from "../terms";
 
 

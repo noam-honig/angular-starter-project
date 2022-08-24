@@ -1,4 +1,4 @@
-import { RemultModule } from '@remult/angular';
+import { CommonUIElementsModule } from 'common-ui-elements';
 import { NgModule, ErrorHandler } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { HomeComponent } from './home/home.component';
@@ -15,13 +15,13 @@ const defaultRoute = terms.home;
 const routes: Routes = [
   { path: defaultRoute, component: HomeComponent },
   { path: terms.userAccounts, component: UsersComponent, canActivate: [AdminGuard] },
-  { path: '**', redirectTo: '/'+defaultRoute, pathMatch: 'full' }
+  { path: '**', redirectTo: '/' + defaultRoute, pathMatch: 'full' }
 
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes),
-    RemultModule,
+    CommonUIElementsModule,
   JwtModule.forRoot({
     config: { tokenGetter: () => AuthService.fromStorage() }
   })],
