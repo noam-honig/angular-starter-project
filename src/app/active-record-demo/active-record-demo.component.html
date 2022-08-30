@@ -1,0 +1,7 @@
+<ul>
+    <li *ngFor="let p of products">
+        {{p.$.name.metadata.caption}}<input [(ngModel)]="p.name">
+        <button (click)="save(p)" [disabled]="!p._.wasChanged()">save</button>
+    </li>
+    <button (click)="add()">Add </button>
+</ul>

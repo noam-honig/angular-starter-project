@@ -1,0 +1,9 @@
+<ul>
+    <li *ngFor="let p of products">
+        <input [(ngModel)]="p.name">
+        <input [(ngModel)]="p.quantity">
+        <button (click)="save(p)">save</button>
+        <button (click)="resetQuantity(p)">reset quantity</button>
+    </li>
+    <button (click)="add()">Add </button>
+</ul>

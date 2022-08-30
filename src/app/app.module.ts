@@ -23,6 +23,9 @@ import { YesNoQuestionComponent } from './common/yes-no-question/yes-no-question
 import { InputAreaComponent } from './common/input-area/input-area.component';
 import { DialogService } from './common/dialog';
 import { AdminGuard } from "./users/AdminGuard";
+import { InstanceBackendMethodComponent } from './instance-backend-method/instance-backend-method.component';
+import { EntityBackendMethodComponent } from './entity-backend-method/entity-backend-method.component';
+import { ActiveRecordDemoComponent } from './active-record-demo/active-record-demo.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +33,10 @@ import { AdminGuard } from "./users/AdminGuard";
     UsersComponent,
     HomeComponent,
     YesNoQuestionComponent,
-    InputAreaComponent
+    InputAreaComponent,
+    InstanceBackendMethodComponent,
+    EntityBackendMethodComponent,
+    ActiveRecordDemoComponent
   ],
   imports: [
     BrowserModule,
