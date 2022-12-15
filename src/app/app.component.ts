@@ -26,9 +26,12 @@ export class AppComponent implements OnInit {
   terms = terms;
   remult = remult;
   darkMode: boolean = false;
-  themeName: string = '';
+  themeName: string = 'default';
 
   updateTheme(theme?: 'default' | 'blue-theme' | 'calm-theme' | 'forest-theme' | 'indigo-theme' | 'strobe-theme' | 'ugly-theme') {
+    if (theme === 'default') {
+      this.darkMode = false;
+    }
     if (theme) {
       if (this.themeName)
         document.body.classList.remove(this.themeName);
