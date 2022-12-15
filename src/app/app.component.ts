@@ -25,6 +25,14 @@ export class AppComponent implements OnInit {
   }
   terms = terms;
   remult = remult;
+  darkMode: boolean = false;
+
+  updateTheme(){
+    if (this.darkMode)
+      document.body.classList.add('dark-mode');
+    else
+      document.body.classList.remove('dark-mode'); 
+  }
 
   async signIn() {
     const signIn = new SignInController();

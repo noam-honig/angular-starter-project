@@ -4,6 +4,8 @@
       <mat-icon>menu</mat-icon>
     </button>
     <span class="toolbar-title">{{currentTitle()}}</span>
+    <mat-slide-toggle [(ngModel)]="darkMode" (change)="updateTheme()"></mat-slide-toggle>
+    <mat-icon>dark_mode</mat-icon>
     <ng-container *ngIf="!remult.authenticated()">
       <button mat-flat-button color="primary" (click)="signIn()">{{terms.signIn}}</button>
     </ng-container>
