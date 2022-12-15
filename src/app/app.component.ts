@@ -26,12 +26,23 @@ export class AppComponent implements OnInit {
   terms = terms;
   remult = remult;
   darkMode: boolean = false;
+  themeName: string = '';
 
-  updateTheme(){
+  updateTheme(theme?: 'default' | 'blue-theme' | 'calm-theme' | 'forest-theme' | 'indigo-theme' | 'strobe-theme' | 'ugly-theme') {
+    if (theme) {
+      if (this.themeName)
+        document.body.classList.remove(this.themeName);
+      this.themeName = theme;
+      if (this.themeName === 'default')
+        this.darkMode = false;
+      else
+        document.body.classList.add(this.themeName);
+    }
+
     if (this.darkMode)
       document.body.classList.add('dark-mode');
     else
-      document.body.classList.remove('dark-mode'); 
+      document.body.classList.remove('dark-mode');
   }
 
   async signIn() {

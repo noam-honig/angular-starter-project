@@ -55,7 +55,14 @@
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles.scss",
-              "src/app/common-ui-elements/input-styles.scss"
+              "src/app/common-ui-elements/input-styles.scss",
+              "src/themes/_general.scss",
+              "src/themes/blue.scss",
+              "src/themes/calm.scss",
+              "src/themes/forest.scss",
+              "src/themes/indigo.scss",
+              "src/themes/strobe.scss",
+              "src/themes/ugly.scss"
             ],
             "scripts": []
           },
