@@ -4,6 +4,20 @@
       <mat-icon>menu</mat-icon>
     </button>
     <span class="toolbar-title">{{currentTitle()}}</span>
+    <button [matMenuTriggerFor]="themeMenu" mat-button>
+      <mat-icon>palette</mat-icon>
+    </button>
+    <mat-menu #themeMenu="matMenu">
+      <button mat-menu-item (click)="updateTheme('default')">Default</button>
+      <button mat-menu-item (click)="updateTheme('blue-theme')">Blue</button>
+      <button mat-menu-item (click)="updateTheme('calm-theme')">Calm</button>
+      <button mat-menu-item (click)="updateTheme('forest-theme')">Forest</button>
+      <button mat-menu-item (click)="updateTheme('indigo-theme')">Indigo</button>
+      <button mat-menu-item (click)="updateTheme('strobe-theme')">Strobe</button>
+      <button mat-menu-item (click)="updateTheme('ugly-theme')">Ugly</button>
+    </mat-menu>
+    <mat-slide-toggle [(ngModel)]="darkMode" [disabled]="themeName === 'default'" (change)="updateTheme()"></mat-slide-toggle>
+    <mat-icon>dark_mode</mat-icon>
     <ng-container *ngIf="!remult.authenticated()">
       <button mat-flat-button color="primary" (click)="signIn()">{{terms.signIn}}</button>
     </ng-container>

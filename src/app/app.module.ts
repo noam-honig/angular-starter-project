@@ -15,6 +15,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle'
 import { CommonUIElementsModule } from 'common-ui-elements';
 import { UsersComponent } from './users/users.component';
 import { HomeComponent } from './home/home.component';
@@ -51,6 +52,7 @@ import { TextAreaDataControlComponent } from './common/textarea-data-control/tex
     MatButtonModule,
     MatIconModule,
     MatMenuModule,
+    MatSlideToggleModule,
     CommonUIElementsModule
   ],
   providers: [
