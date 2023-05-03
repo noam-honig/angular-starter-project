@@ -1,5 +1,5 @@
 
-import { FieldMetadata, FieldRef, EntityMetadata, getEntityRef, IdEntity, ValueListItem, EntityRef, Allowed, FieldOptions, ValueConverter, Unobserve, Repository, EntityOrderBy, EntityFilter, ValueListInfo, Remult, remult } from "remult";
+import { FieldMetadata, FieldRef, EntityMetadata, getEntityRef, IdEntity, ValueListItem, EntityRef, Allowed, FieldOptions, ValueConverter, Unsubscribe, Repository, EntityOrderBy, EntityFilter, ValueListInfo, Remult, remult } from "remult";
 
 import { DataControlInfo, DataControlSettings, decorateDataSettings, getFieldDefinition, ValueOrEntityExpression } from "./data-control-interfaces";
 import { FilterHelper } from "./filter-helper";
@@ -404,10 +404,14 @@ export class InputField<valueType> implements FieldRef<any, valueType> {
       allowNull: settings.allowNull!,
       caption: settings.caption,
       options: this.options,
-      valueConverter: valueConverter!,
+      valueConverter: valueConverter! as any,
       valueType: settings.valueType,
       key: settings.key,
-      dbName: settings.dbName!,
+      displayValue: () => '',
+      apiUpdateAllowed: () => true,
+      includedInApi: true,
+      toInput: x => x,
+      fromInput: x => x,
       dbReadOnly: false,
       inputType: settings.inputType!,
       isServerExpression: false,
@@ -418,7 +422,7 @@ export class InputField<valueType> implements FieldRef<any, valueType> {
 
 
   }
-  subscribe(listener: RefSubscriber): Unobserve {
+  subscribe(listener: RefSubscriber): Unsubscribe {
     throw new Error("Method not implemented.");
   }
   valueIsNull() {
@@ -430,23 +434,8 @@ export class InputField<valueType> implements FieldRef<any, valueType> {
   load(): Promise<valueType> {
     throw new Error("Method not implemented.");
   }
-  metadata: {
-    readonly key: string;
-    readonly target: ClassType<valueType>;
-    readonly valueType: any;
-    getDbName: () => Promise<string>;
+  metadata: FieldMetadata;
 
-    caption: string;
-    readonly inputType: string;
-    readonly allowNull: boolean;
-
-
-    readonly isServerExpression: boolean;
-    readonly dbReadOnly: boolean;
-    readonly dbName: string;
-    readonly valueConverter: ValueConverter<valueType>;
-    readonly options: FieldOptions;
-  };
   _value!: valueType;
   inputType: string;
   error!: string;
