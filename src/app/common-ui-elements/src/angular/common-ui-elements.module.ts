@@ -41,24 +41,21 @@ import { CommonUIElementsPluginsService } from './CommonUIElementsPluginsService
 
 
 @NgModule({
-  declarations: [DataControl2Component, DataArea2Component, DataFilterInfoComponent, DataGrid2Component, WaitComponent, DataControl3Component, SelectValueDialogComponent, FilterDialogComponent],
-  imports: [FormsModule, CommonModule, HttpClientModule, MatProgressSpinnerModule, MatDialogModule, BrowserAnimationsModule,
-    MatFormFieldModule,
-    MatButtonModule,
-    MatListModule,
-    MatTooltipModule,
-    MatInputModule, MatIconModule, ReactiveFormsModule, MatCheckboxModule, MatMenuModule, BidiModule],
-  providers: [{
-    provide: Remult,
-    useFactory: () => remult
-  },
-    NotAuthenticatedGuard, AuthenticatedGuard, RouteHelperService,
-    BusyService, CommonUIElementsPluginsService,
-
-  { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true }]
-  ,
-  exports: [DataControl2Component, DataFilterInfoComponent, DataGrid2Component, DataArea2Component, SelectValueDialogComponent],
-  entryComponents: [WaitComponent, SelectValueDialogComponent, FilterDialogComponent]
+    declarations: [DataControl2Component, DataArea2Component, DataFilterInfoComponent, DataGrid2Component, WaitComponent, DataControl3Component, SelectValueDialogComponent, FilterDialogComponent],
+    imports: [FormsModule, CommonModule, HttpClientModule, MatProgressSpinnerModule, MatDialogModule, BrowserAnimationsModule,
+        MatFormFieldModule,
+        MatButtonModule,
+        MatListModule,
+        MatTooltipModule,
+        MatInputModule, MatIconModule, ReactiveFormsModule, MatCheckboxModule, MatMenuModule, BidiModule],
+    providers: [{
+            provide: Remult,
+            useFactory: () => remult
+        },
+        NotAuthenticatedGuard, AuthenticatedGuard, RouteHelperService,
+        BusyService, CommonUIElementsPluginsService,
+        { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true }],
+    exports: [DataControl2Component, DataFilterInfoComponent, DataGrid2Component, DataArea2Component, SelectValueDialogComponent]
 })
 export class CommonUIElementsModule {
   constructor(http: HttpClient, dialog: MatDialog) {

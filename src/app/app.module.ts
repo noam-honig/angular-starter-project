@@ -27,38 +27,38 @@ import { SignInController } from './users/SignInController';
 import { TextAreaDataControlComponent } from './common/textarea-data-control/textarea-data-control.component';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    UsersComponent,
-    HomeComponent,
-    YesNoQuestionComponent,
-    DataAreaDialogComponent,
-    TextAreaDataControlComponent
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    FormsModule,
-    MatSidenavModule,
-    MatListModule,
-    MatToolbarModule,
-    MatCheckboxModule,
-    MatCardModule,
-    MatDialogModule,
-    MatSnackBarModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    MatIconModule,
-    MatMenuModule,
-    CommonUIElementsModule
-  ],
-  providers: [
-    UIToolsService,
-    AdminGuard,
-    { provide: APP_INITIALIZER, useFactory: initApp, multi: true }],
-  bootstrap: [AppComponent],
-  entryComponents: [YesNoQuestionComponent, DataAreaDialogComponent]
+    declarations: [
+        AppComponent,
+        UsersComponent,
+        HomeComponent,
+        YesNoQuestionComponent,
+        DataAreaDialogComponent,
+        TextAreaDataControlComponent
+    ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        FormsModule,
+        MatSidenavModule,
+        MatListModule,
+        MatToolbarModule,
+        MatCheckboxModule,
+        MatCardModule,
+        MatDialogModule,
+        MatSnackBarModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatButtonModule,
+        MatIconModule,
+        MatMenuModule,
+        CommonUIElementsModule
+    ],
+    providers: [
+        UIToolsService,
+        AdminGuard,
+        { provide: APP_INITIALIZER, useFactory: initApp, multi: true }
+    ],
+    bootstrap: [AppComponent]
 })
 export class AppModule { }
 
