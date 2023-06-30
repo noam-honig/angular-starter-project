@@ -25,6 +25,7 @@ import { AdminGuard } from "./users/AdminGuard";
 import { remult } from 'remult';
 import { SignInController } from './users/SignInController';
 import { TextAreaDataControlComponent } from './common/textarea-data-control/textarea-data-control.component';
+import { DotsMenuComponent } from './common/dot-menu.component';
 
 @NgModule({
     declarations: [
@@ -33,7 +34,8 @@ import { TextAreaDataControlComponent } from './common/textarea-data-control/tex
         HomeComponent,
         YesNoQuestionComponent,
         DataAreaDialogComponent,
-        TextAreaDataControlComponent
+        TextAreaDataControlComponent,
+        DotsMenuComponent
     ],
     imports: [
         BrowserModule,
