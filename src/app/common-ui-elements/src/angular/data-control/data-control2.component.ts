@@ -131,7 +131,9 @@ export class DataControl2Component {
     return 'auto';
   }
 
-
+  ngDoCheck(){
+    this.settings.checkValueListChange()
+  }
   ngErrorStateMatches = new class extends ErrorStateMatcher {
     constructor(public parent: DataControl2Component) {
       super();

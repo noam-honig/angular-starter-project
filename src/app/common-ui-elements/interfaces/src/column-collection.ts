@@ -5,8 +5,6 @@ import { DataControlInfo, DataControlSettings, decorateDataSettings, getFieldDef
 import { FilterHelper } from "./filter-helper";
 import { decorateColumnSettings, getEntitySettings, RefSubscriber } from 'remult/src/remult3';
 
-import { ClassType } from "remult/classType";
-
 
 
 
@@ -117,9 +115,22 @@ export class FieldCollection<rowType = any> {
       what(remult);
     }
   }
+  refreshMap = new Map<DataControlSettings, {
+    lastValue: string,
+    origValueList: any
+  }>()
   async buildDropDown(s: DataControlSettings) {
     if (s.valueList) {
       let orig = s.valueList;
+      if (s.valueListChangeKey) {
+        let item = this.refreshMap.get(s);
+        if (!item) {
+          this.refreshMap.set(s, item = {
+            lastValue: '',
+            origValueList: orig
+          })
+        }
+      }
       let result: ValueListItem[] = [];
       s.valueList = result;
 
@@ -245,6 +256,19 @@ export class FieldCollection<rowType = any> {
 
     return r;
   }
+  public checkValueListChange() {
+    if (this.refreshMap.size > 0) {
+      this.refreshMap.forEach((value, s) => {
+        const newVal = value.origValueList();
+        if (newVal != value.lastValue) {
+          value.lastValue = newVal;
+          s.valueList = value.origValueList;
+          this.buildDropDown(s);
+        }
+      });
+    }
+  }
+
   _getColDataType(col: DataControlSettings) {
     if (col.inputType)
       return col.inputType;

@@ -21,6 +21,7 @@ export interface DataControlSettings<entityType = any, valueType = any> {
     clickIcon?: string;
 
     valueList?: ValueListItem[] | string[] | any[] | Promise<ValueListItem[]> | ((remult: Remult) => Promise<ValueListItem[]>) | ((remult: Remult) => ValueListItem[]);
+    valueListChangeKey?:()=>string;
     inputType?: string; //used: password,date,tel,text,checkbox,number
     hideDataOnInput?: boolean;//consider also setting the width of the data on input - for datas with long input
     useContainsFilter?: boolean;
