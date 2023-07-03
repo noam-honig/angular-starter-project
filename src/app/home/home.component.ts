@@ -35,7 +35,9 @@ export class HomeComponent implements OnInit {
         {
           field: $.b,
           //@ts-ignore
-          valueList: () => options[this.a],
+          valueList:async () =>{
+            //@ts-ignore
+            return options[this.a] },
           valueListChangeKey: () => this.a,
         },
       ];

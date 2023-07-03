@@ -126,7 +126,7 @@ export class FieldCollection<rowType = any> {
         let item = this.refreshMap.get(s);
         if (!item) {
           this.refreshMap.set(s, item = {
-            lastValue: '',
+            lastValue: s.valueListChangeKey(),
             origValueList: orig
           })
         }
@@ -259,7 +259,7 @@ export class FieldCollection<rowType = any> {
   public checkValueListChange() {
     if (this.refreshMap.size > 0) {
       this.refreshMap.forEach((value, s) => {
-        const newVal = value.origValueList();
+        const newVal = s.valueListChangeKey!();
         if (newVal != value.lastValue) {
           value.lastValue = newVal;
           s.valueList = value.origValueList;
