@@ -7,7 +7,7 @@ import compression from 'compression'
 import { api } from './api'
 import { getRequestMiddleware } from './getRequestMiddleware'
 import session from 'cookie-session'
-import csrf from 'csurf'
+
 import { SignInController } from '../app/users/SignInController'
 
 async function startup() {
@@ -23,13 +23,7 @@ async function startup() {
   )
   app.use(compression())
   app.use(helmet({ contentSecurityPolicy: false }))
-  app.use('/api', (req, res, next) => {
-    //disable csrf for the `currentUser` backend method that is the first call of the web site.
-    const currentUserMethodName: keyof typeof SignInController = 'currentUser'
-    if (req.path === '/' + currentUserMethodName)
-      csrf({ ignoreMethods: ['post'] })(req, res, next)
-    else csrf({})(req, res, next)
-  })
+
   app.use('/api', (req, res, next) => {
     res.cookie('XSRF-TOKEN', req.csrfToken())
     next()
