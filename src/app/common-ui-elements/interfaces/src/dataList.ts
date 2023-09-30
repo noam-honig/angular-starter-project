@@ -1,4 +1,4 @@
-import { EntityFilter, FindOptions, Repository } from 'remult/src/remult3'
+import { EntityFilter, FindOptions, Repository } from 'remult'
 
 export class DataList<T> implements Iterable<T> {
   [Symbol.iterator](): Iterator<T> {

@@ -26,11 +26,8 @@ import {
   ValueOrEntityExpression,
 } from './data-control-interfaces'
 import { FilterHelper } from './filter-helper'
-import {
-  decorateColumnSettings,
-  getEntitySettings,
-  RefSubscriber,
-} from 'remult/src/remult3'
+import { decorateColumnSettings, getEntitySettings } from 'remult/internals'
+import { RefSubscriber } from 'remult'
 
 export class FieldCollection<rowType = any> {
   constructor(
