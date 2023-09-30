@@ -1,29 +1,40 @@
-import { Allow, BackendMethod, Controller, ControllerBase, Fields, remult, Validators } from "remult";
-import { terms } from "../terms";
-import { User } from "./user";
+import {
+  Allow,
+  BackendMethod,
+  Controller,
+  ControllerBase,
+  Fields,
+  remult,
+  Validators,
+} from 'remult'
+import { terms } from '../terms'
+import { User } from './user'
 
-@Controller("updatePassword")
+@Controller('updatePassword')
 export class UpdatePasswordController extends ControllerBase {
-    @Fields.string({
-        caption: terms.password,
-        validate: Validators.required,
-        inputType: 'password'
-    })
-    password = '';
-    @Fields.string<UpdatePasswordController>({
-        caption: terms.confirmPassword,
-        validate: [Validators.required, self => {
-            if (self.password != self.confirmPassword)
-                throw terms.doesNotMatchPassword;
-        }],
-        inputType: 'password'
-    })
-    confirmPassword = '';
+  @Fields.string({
+    caption: terms.password,
+    validate: Validators.required,
+    inputType: 'password',
+  })
+  password = ''
+  @Fields.string<UpdatePasswordController>({
+    caption: terms.confirmPassword,
+    validate: [
+      Validators.required,
+      (self) => {
+        if (self.password != self.confirmPassword)
+          throw terms.doesNotMatchPassword
+      },
+    ],
+    inputType: 'password',
+  })
+  confirmPassword = ''
 
-    @BackendMethod({ allowed: Allow.authenticated })
-    async updatePassword() {
-        const user = await remult.repo(User).findId(remult.user!.id);
-        await user.hashAndSetPassword(this.password);
-        await user.save();
-    }
+  @BackendMethod({ allowed: Allow.authenticated })
+  async updatePassword() {
+    const user = await remult.repo(User).findId(remult.user!.id)
+    await user.hashAndSetPassword(this.password)
+    await user.save()
+  }
 }

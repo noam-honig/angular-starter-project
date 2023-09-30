@@ -1,24 +1,31 @@
-<h3 matDialogHeader>{{args.title}}</h3>
+<h3 matDialogHeader>{{ args.title }}</h3>
 
 <mat-dialog-content>
-  <div style="margin:8px 0">
+  <div style="margin: 8px 0">
     <div class="help-text" *ngIf="args.helpText">
-      {{args.helpText}}
+      {{ args.helpText }}
     </div>
     <data-area [settings]="area"> </data-area>
   </div>
 </mat-dialog-content>
 <mat-dialog-actions>
-
-  <button mat-raised-button *ngFor="let b of args.buttons" (click)="buttonClick(b,$event)">
-    {{b.text}}
+  <button
+    mat-raised-button
+    *ngFor="let b of args.buttons"
+    (click)="buttonClick(b, $event)"
+  >
+    {{ b.text }}
   </button>
-  <button type="button" mat-raised-button color="warning" (click)="dialogRef.close()">
-    {{terms.cancel}}
+  <button
+    type="button"
+    mat-raised-button
+    color="warning"
+    (click)="dialogRef.close()"
+  >
+    {{ terms.cancel }}
   </button>
 
   <button mat-raised-button color="accent" (click)="confirm()">
-    {{terms.ok}}
+    {{ terms.ok }}
   </button>
-
 </mat-dialog-actions>

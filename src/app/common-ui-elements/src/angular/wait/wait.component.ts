@@ -1,17 +1,15 @@
-import { Component, OnInit } from '@angular/core';
-import { ProgressSpinnerMode } from '@angular/material/progress-spinner';
+import { Component, OnInit } from '@angular/core'
+import { ProgressSpinnerMode } from '@angular/material/progress-spinner'
 
 @Component({
   selector: 'app-wait',
   templateUrl: './wait.component.html',
-  styleUrls: ['./wait.component.scss']
+  styleUrls: ['./wait.component.scss'],
 })
 export class WaitComponent implements OnInit {
+  constructor() {}
 
-  constructor() { }
-
-  ngOnInit() {
-  }
-  mode:ProgressSpinnerMode =  'indeterminate';
-  value = 0;
+  ngOnInit() {}
+  mode: ProgressSpinnerMode = 'indeterminate'
+  value = 0
 }

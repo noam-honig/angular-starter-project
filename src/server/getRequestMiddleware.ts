@@ -1,11 +1,10 @@
-import { Request, RequestHandler, Response, Router } from "express";
-import { AsyncLocalStorage } from 'async_hooks';
-import { getRequestConfig } from "./getRequest";
+import { Request, RequestHandler, Response, Router } from 'express'
+import { AsyncLocalStorage } from 'async_hooks'
+import { getRequestConfig } from './getRequest'
 
-const requestAsyncStorage = new AsyncLocalStorage<Request>();
+const requestAsyncStorage = new AsyncLocalStorage<Request>()
 
-getRequestConfig.requestFactory = () => requestAsyncStorage.getStore()!;
+getRequestConfig.requestFactory = () => requestAsyncStorage.getStore()!
 export const getRequestMiddleware: RequestHandler = (req, res, next) => {
-  requestAsyncStorage.run(req, () => next());
+  requestAsyncStorage.run(req, () => next())
 }
-

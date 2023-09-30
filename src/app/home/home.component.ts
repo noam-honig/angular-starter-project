@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { Fields, getFields } from 'remult';
-import { DataAreaSettings } from '../common-ui-elements/interfaces';
+import { Component, OnInit } from '@angular/core'
+import { Fields, getFields } from 'remult'
+import { DataAreaSettings } from '../common-ui-elements/interfaces'
 
 const options = {
   a: ['a', 'b', 'c'].map((x) => ({
@@ -11,7 +11,7 @@ const options = {
     id: x,
     caption: x,
   })),
-};
+}
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -21,12 +21,12 @@ export class HomeComponent implements OnInit {
   constructor() {}
 
   @Fields.string()
-  a = 'a';
+  a = 'a'
   @Fields.string()
-  b = '';
+  b = ''
   area = new DataAreaSettings({
     fields: () => {
-      const $ = getFields(this);
+      const $ = getFields(this)
       return [
         {
           field: $.a,
@@ -35,14 +35,15 @@ export class HomeComponent implements OnInit {
         {
           field: $.b,
           //@ts-ignore
-          valueList:async () =>{
+          valueList: async () => {
             //@ts-ignore
-            return options[this.a] },
+            return options[this.a]
+          },
           valueListChangeKey: () => this.a,
         },
-      ];
+      ]
     },
-  });
+  })
 
   ngOnInit() {}
 }
