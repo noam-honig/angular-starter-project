@@ -10,18 +10,5 @@ import { DataAreaSettings } from '../common-ui-elements/interfaces'
 export class HomeComponent implements OnInit {
   constructor() {}
 
-  @Fields.string<HomeComponent>({
-    customInput: (o) => {
-      o.inputAddress((result, self: HomeComponent) => {
-        self.city = result.city
-      })
-    },
-  })
-  a = 'a'
-  get $() {
-    return getFields(this)
-  }
-
-  city = 'NONE'
   ngOnInit() {}
 }
