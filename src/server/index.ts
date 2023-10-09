@@ -24,10 +24,6 @@ async function startup() {
   app.use(compression())
   app.use(helmet({ contentSecurityPolicy: false }))
 
-  app.use('/api', (req, res, next) => {
-    res.cookie('XSRF-TOKEN', req.csrfToken())
-    next()
-  })
   app.use(getRequestMiddleware)
   app.use(api)
 
