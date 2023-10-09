@@ -11,7 +11,7 @@ import {
 import { terms } from '../terms'
 import { Roles } from './roles'
 import { User } from './user'
-import { getRequest } from '../../server/getRequest'
+import { setSessionUser } from '../../server/server-session'
 
 @Controller('signIn')
 export class SignInController extends ControllerBase {
@@ -71,17 +71,13 @@ export class SignInController extends ControllerBase {
     }
 
     if (result) {
-      const req = getRequest()
-      req.session!['user'] = result
-      if (this.rememberOnThisDevice)
-        req.sessionOptions.maxAge = 365 * 24 * 60 * 60 * 1000 //remember for a year
-      return result
+      return setSessionUser(result, this.rememberOnThisDevice)
     }
     throw new Error(terms.invalidSignIn)
   }
   @BackendMethod({ allowed: Allow.authenticated })
   static signOut() {
-    getRequest().session!['user'] = undefined
+    setSessionUser(undefined!, true)
   }
   @BackendMethod({ allowed: true })
   static currentUser() {

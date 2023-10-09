@@ -5,7 +5,6 @@ import sslRedirect from 'heroku-ssl-redirect'
 import helmet from 'helmet'
 import compression from 'compression'
 import { api } from './api'
-import { getRequestMiddleware } from './getRequestMiddleware'
 import session from 'cookie-session'
 
 import { SignInController } from '../app/users/SignInController'
@@ -24,7 +23,6 @@ async function startup() {
   app.use(compression())
   app.use(helmet({ contentSecurityPolicy: false }))
 
-  app.use(getRequestMiddleware)
   app.use(api)
 
   app.use(express.static('dist/angular-starter-project'))
