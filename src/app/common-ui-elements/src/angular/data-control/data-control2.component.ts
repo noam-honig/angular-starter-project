@@ -63,6 +63,7 @@ export class DataControl2Component {
       componentRef.instance.args = {
         fieldRef,
         settings: this.map,
+        args: this.map.customComponent.args,
       }
     }
   }

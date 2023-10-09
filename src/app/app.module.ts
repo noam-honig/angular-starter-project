@@ -26,6 +26,7 @@ import { remult } from 'remult'
 import { SignInController } from './users/SignInController'
 import { TextAreaDataControlComponent } from './common/textarea-data-control/textarea-data-control.component'
 import { DotsMenuComponent } from './common/dot-menu.component'
+import { AddressInputComponent } from './common-ui-elements/address-input/address-input.component'
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { DotsMenuComponent } from './common/dot-menu.component'
     YesNoQuestionComponent,
     DataAreaDialogComponent,
     TextAreaDataControlComponent,
+    AddressInputComponent,
     DotsMenuComponent,
   ],
   imports: [

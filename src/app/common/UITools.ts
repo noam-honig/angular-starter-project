@@ -1,4 +1,8 @@
 import { FieldRef } from 'remult'
+import {
+  GeocodeResult,
+  Location,
+} from '../common-ui-elements/address-input/google-api-helpers'
 
 export interface UITools {
   selectValuesDialog<
@@ -16,6 +20,9 @@ export interface UITools {
 }
 
 export interface customInputOptions {
+  inputAddress(
+    onSelect?: (result: InputAddressResult, entityInstance: any) => void
+  ): void
   textarea(): void
 }
 
@@ -29,4 +36,11 @@ declare module 'remult' {
     ) => void
     customInput?: (inputOptions: customInputOptions) => void
   }
+}
+
+export interface InputAddressResult {
+  addressByGoogle: string
+  location: Location
+  city: string
+  autoCompleteResult: GeocodeResult
 }

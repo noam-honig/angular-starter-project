@@ -9,8 +9,9 @@ import {
   SelectValueDialogComponent,
 } from 'common-ui-elements'
 import { terms } from '../terms'
-import { UITools } from './UITools'
+import { InputAddressResult, UITools } from './UITools'
 import { TextAreaDataControlComponent } from './textarea-data-control/textarea-data-control.component'
+import { AddressInputComponent } from '../common-ui-elements/address-input/address-input.component'
 
 @Injectable()
 export class UIToolsService implements UITools {
@@ -77,6 +78,14 @@ export class UIToolsService implements UITools {
           textarea() {
             options.customComponent = {
               component: TextAreaDataControlComponent,
+            }
+          },
+          inputAddress(
+            onSelect?: (result: InputAddressResult, entityInstance: any) => void
+          ) {
+            options.customComponent = {
+              component: AddressInputComponent,
+              args: onSelect,
             }
           },
         })
