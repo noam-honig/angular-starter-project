@@ -1,4 +1,4 @@
-import { FieldRef } from 'remult'
+import { FieldRef, Remult, ValueListItem } from 'remult'
 import { GeocodeResult, Location } from './address-input/google-api-helpers'
 import {
   DataAreaFieldsSetting,
@@ -49,6 +49,13 @@ declare module 'remult' {
       fieldRef: FieldRef<valueType>
     ) => void
     customInput?: (inputOptions: customInputOptions<entityType>) => void
+    valueList?:
+      | ValueListItem[]
+      | string[]
+      | any[]
+      | Promise<ValueListItem[]>
+      | ((remult: Remult) => Promise<ValueListItem[]>)
+      | ((remult: Remult) => ValueListItem[])
   }
 }
 

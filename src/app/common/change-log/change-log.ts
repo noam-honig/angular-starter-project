@@ -1,6 +1,5 @@
 import {
   Entity,
-  EntityBase,
   FieldRef,
   Fields,
   FieldsRef,
@@ -8,10 +7,9 @@ import {
   IdEntity,
   isBackend,
   remult,
+  LifecycleEvent,
 } from 'remult'
 import { Roles } from '../../users/roles'
-import { OrgEntity } from 'src/app/users/OrgEntity'
-import { getCurrentSiteUserId, getCurrentUserId } from '../../users/user'
 
 @Entity<ChangeLog>('changeLog', {
   allowApiRead: Roles.admin,
@@ -19,7 +17,7 @@ import { getCurrentSiteUserId, getCurrentUserId } from '../../users/user'
     changeDate: 'desc',
   },
 })
-export class ChangeLog extends OrgEntity {
+export class ChangeLog extends IdEntity {
   @Fields.string()
   relatedId: string = ''
   @Fields.string()
@@ -55,14 +53,15 @@ export interface change {
   newDisplayValue: string
 }
 
-export async function recordChanges<entityType extends EntityBase>(
+export async function recordChanges<entityType>(
   self: entityType,
+  e: LifecycleEvent<entityType>,
   options?: ColumnDeciderArgs<entityType>
 ) {
   if (isBackend()) {
     let changes = [] as change[]
     const decider = new FieldDecider(self, options)
-    const isNew = options?.forceNew || self.isNew()
+    const isNew = options?.forceNew || e.isNew
     const changeDate = options?.forceDate || new Date()
 
     for (const c of decider.fields.filter(
@@ -79,7 +78,7 @@ export async function recordChanges<entityType extends EntityBase>(
         changes.push({
           key: c.metadata.key,
           newDisplayValue: noVal ? '***' : transValue(c.value),
-          oldDisplayValue: self.isNew()
+          oldDisplayValue: e.isNew
             ? ''
             : noVal
             ? '***'
@@ -89,7 +88,7 @@ export async function recordChanges<entityType extends EntityBase>(
             : c.value instanceof IdEntity
             ? c.value.id
             : c.metadata.options.valueConverter!.toJson!(c.value),
-          oldValue: self.isNew()
+          oldValue: e.isNew
             ? ''
             : noVal
             ? '***'
@@ -108,10 +107,10 @@ export async function recordChanges<entityType extends EntityBase>(
         changeDate,
         changedFields: changes.map((x) => x.key),
         changes,
-        entity: self._.metadata.key,
-        relatedId: self._.getId().toString(),
-        relatedName: self.$.find('name')?.value,
-        userId: getCurrentSiteUserId() || '',
+        entity: e.metadata.key,
+        relatedId: e.id.toString(),
+        relatedName: e.fields.find('name')?.value,
+        userId: remult.user?.id || '',
         userName: remult.user?.name || '',
       })
     }

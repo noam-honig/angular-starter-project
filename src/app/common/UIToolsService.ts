@@ -108,6 +108,8 @@ export class UIToolsService implements UITools {
             fieldMetadata.options.clickWithUI!(this, entity, fieldRef)
         }
       }
+      if (fieldMetadata.options.valueList)
+        options.valueList = fieldMetadata.options.valueList
       if (fieldMetadata.options.customInput) {
         fieldMetadata.options.customInput({
           image() {
