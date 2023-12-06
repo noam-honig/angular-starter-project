@@ -26,7 +26,7 @@ export function ValueListField<entityType>(
     validate.push(...options.validate)
   }
   return Fields.string({
-    valueList,
+    valueList: valueList.map((x) => ({ id: x, caption: x })),
     ...options,
     validate,
   })
