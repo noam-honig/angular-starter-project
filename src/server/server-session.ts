@@ -1,6 +1,8 @@
-import { UserInfo, remult } from 'remult'
+import { UserInfo, remult, repo } from 'remult'
 import type { Request } from 'express'
 import type from 'cookie-session' //needed for build - do not remove
+import { User } from '../app/users/user'
+import { Roles } from '../app/users/roles'
 
 declare module 'remult' {
   export interface RemultContext {
@@ -12,12 +14,36 @@ declare module 'remult' {
 export async function initRequest(req: Request) {
   remult.context.session = req.session!
   remult.context.sessionOptions = req.sessionOptions
-  remult.user = req.session!['user']
+
+  const sessionUser = req.session!['user']
+  if (!sessionUser || !sessionUser.id) return
+  const user = await repo(User).findFirst({
+    id: sessionUser!.id,
+    disabled: false,
+  })
+  await setSessionUserBasedOnUserRow(user)
 }
 
-export function setSessionUser(user: UserInfo, remember: boolean): UserInfo {
-  remult.context.session['user'] = user
-  if (remember) remult.context.sessionOptions.maxAge = 365 * 24 * 60 * 60 * 1000 //remember for a year
+export function setSessionUser(user: UserInfo): UserInfo {
+  const current = remult.context.session['user']
+  if (JSON.stringify(user) != JSON.stringify(current))
+    remult.context.session['user'] = user
   remult.user = user
   return user
+}
+
+export async function setSessionUserBasedOnUserRow(user: User) {
+  if (!user) {
+    return setSessionUser(undefined!)
+  }
+  const roles: string[] = []
+
+  if (user.admin) {
+    roles.push(Roles.admin)
+  }
+  return setSessionUser({
+    id: user.id,
+    name: user.name,
+    roles,
+  })
 }

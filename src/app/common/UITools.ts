@@ -1,10 +1,17 @@
 import { FieldRef } from 'remult'
+import { GeocodeResult, Location } from './address-input/google-api-helpers'
 import {
-  GeocodeResult,
-  Location,
-} from '../common-ui-elements/address-input/google-api-helpers'
+  DataAreaFieldsSetting,
+  GridSettings,
+} from '../common-ui-elements/interfaces'
 
 export interface UITools {
+  yesNoQuestion: (question: string) => Promise<boolean>
+  info: (info: string) => void
+  error: (err: any) => void
+  gridDialog(args: GridDialogArgs): Promise<void>
+  areaDialog(args: AreaDialogArgs): Promise<void>
+
   selectValuesDialog<
     T extends {
       caption?: string
@@ -14,16 +21,23 @@ export interface UITools {
     onSelect: (selected: T) => void
     title?: string
   }): Promise<void>
-  yesNoQuestion: (question: string) => Promise<boolean>
-  info: (info: string) => void
-  error: (err: any) => void
+  multiSelectValueDialog<T>(args: MultiSelectOptions<T>): Promise<void>
 }
 
-export interface customInputOptions {
+export interface MultiSelectOptions<T> {
+  values: T[]
+  selected?: T[]
+  onSelect: (selected: T[]) => void
+  getCaption: (item: T) => string
+  title?: string
+}
+
+export interface customInputOptions<entityType> {
   inputAddress(
-    onSelect?: (result: InputAddressResult, entityInstance: any) => void
+    onSelect?: (result: InputAddressResult, entityInstance: entityType) => void
   ): void
   textarea(): void
+  image(): void
 }
 
 declare module 'remult' {
@@ -34,13 +48,35 @@ declare module 'remult' {
       entity: entityType,
       fieldRef: FieldRef<valueType>
     ) => void
-    customInput?: (inputOptions: customInputOptions) => void
+    customInput?: (inputOptions: customInputOptions<entityType>) => void
   }
 }
 
 export interface InputAddressResult {
   addressByGoogle: string
   location: Location
-  city: string
   autoCompleteResult: GeocodeResult
+}
+
+export interface GridDialogArgs {
+  title: string
+  settings: GridSettings<any>
+  ok?: () => void
+  cancel?: () => void
+  validate?: () => Promise<void>
+  buttons?: button[]
+}
+export interface button {
+  text: string
+  click: (close: () => void) => void
+  visible?: () => boolean
+}
+export interface AreaDialogArgs {
+  title?: string
+  helpText?: string
+  fields: DataAreaFieldsSetting<any>[]
+  ok: () => void
+  cancel?: () => void
+  validate?: () => Promise<void>
+  buttons?: button[]
 }

@@ -9,13 +9,14 @@ import {
   Allowed,
   FieldOptions,
   ValueConverter,
-  Unsubscribe,
   Repository,
   EntityOrderBy,
   EntityFilter,
   ValueListInfo,
   Remult,
   remult,
+  Unsubscribe,
+  RefSubscriber,
 } from 'remult'
 
 import {
@@ -27,7 +28,8 @@ import {
 } from './data-control-interfaces'
 import { FilterHelper } from './filter-helper'
 import { decorateColumnSettings, getEntitySettings } from 'remult/internals'
-import { RefSubscriber } from 'remult'
+
+import { ClassType } from 'remult/classType'
 
 export class FieldCollection<rowType = any> {
   constructor(
@@ -226,6 +228,10 @@ export class FieldCollection<rowType = any> {
   _getEditable(col: DataControlSettings, row: rowType) {
     if (!this.allowUpdate()) return false
     if (!col.field) return false
+    let ref = col.field as FieldRef<any, any>
+    if (!row && ref) {
+      row = ref.container
+    }
     if (col.readonly !== undefined)
       return !valueOrEntityExpressionToValue(col.readonly, row)
     return true
@@ -312,6 +318,7 @@ export class FieldCollection<rowType = any> {
         }
       }
 
+      c.error = ''
       if (!col.valueChange) return false
       return col.valueChange(row, c)
     })
@@ -326,7 +333,7 @@ export class FieldCollection<rowType = any> {
   private augmented = new Map<DataControlSettings, boolean>()
   augment(augmenter: dataControlAugmenter, s: DataControlSettings) {
     if (this.augmented.get(s)) return
-    augmenter(getFieldDefinition(s.field!)!, s)
+    if (s.field) augmenter(getFieldDefinition(s.field)!, s)
     this.augmented.set(s, true)
   }
   private _initColumnsArrays(augmenter: dataControlAugmenter) {
@@ -415,7 +422,7 @@ export class InputField<valueType> implements FieldRef<any, valueType> {
       key: settings.key,
       displayValue: () => '',
       apiUpdateAllowed: () => true,
-      includedInApi: true,
+      includedInApi: () => true,
       toInput: (x) => x,
       fromInput: (x) => x,
       dbReadOnly: false,

@@ -15,7 +15,7 @@ import { terms } from '../terms'
 @Entity<User>('Users', {
   allowApiRead: Allow.authenticated,
   allowApiUpdate: Allow.authenticated,
-  allowApiDelete: Roles.admin,
+  allowApiDelete: false,
   allowApiInsert: Roles.admin,
   apiPrefilter: () =>
     !remult.isAllowed(Roles.admin) ? { id: [remult.user?.id!] } : {},
@@ -45,6 +45,11 @@ export class User extends IdEntity {
     caption: terms.admin,
   })
   admin = false
+  @Fields.boolean({
+    allowApiUpdate: Roles.admin,
+    caption: terms.disabled,
+  })
+  disabled = false
 
   async hashAndSetPassword(password: string) {
     this.password = (await import('password-hash')).generate(password)

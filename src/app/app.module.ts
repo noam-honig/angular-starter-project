@@ -26,7 +26,9 @@ import { remult } from 'remult'
 import { SignInController } from './users/SignInController'
 import { TextAreaDataControlComponent } from './common/textarea-data-control/textarea-data-control.component'
 import { DotsMenuComponent } from './common/dot-menu.component'
-import { AddressInputComponent } from './common-ui-elements/address-input/address-input.component'
+import { AddressInputComponent } from './common/address-input/address-input.component'
+import { MultiSelectListDialogComponent } from './common/multi-select-list-dialog/multi-select-list-dialog.component'
+import { InputImageComponent } from './common/input-image/input-image.component'
 
 @NgModule({
   declarations: [
@@ -38,6 +40,8 @@ import { AddressInputComponent } from './common-ui-elements/address-input/addres
     TextAreaDataControlComponent,
     AddressInputComponent,
     DotsMenuComponent,
+    MultiSelectListDialogComponent,
+    InputImageComponent,
   ],
   imports: [
     BrowserModule,

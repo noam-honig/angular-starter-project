@@ -8,3 +8,53 @@ body {
   margin: 0;
   font-family: Roboto, 'Helvetica Neue', sans-serif;
 }
+
+a {
+  background-color: transparent;
+  color: #337ab7;
+  text-decoration: none;
+}
+
+a:hover {
+  background-color: transparent;
+  color: #337ab7;
+  text-decoration: underline;
+}
+
+.full-page {
+  height: 100%;
+  display: flex;
+  flex-flow: column;
+}
+
+.grow-item {
+  height: 250px;
+  flex-grow: 1;
+  flex-shrink: 0;
+  overflow-y: auto;
+}
+
+.canceled {
+  background-color: lightgray !important;
+
+  >td {
+    background-color: lightgray !important;
+  }
+}
+
+.table,
+th,
+td {
+  border: 1px solid #ddd;
+  padding: 10px 10px;
+}
+
+th {
+  background-color: #f1f1f1;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+}

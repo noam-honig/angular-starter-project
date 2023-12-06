@@ -106,7 +106,7 @@
       <div class="dataGridBodyArea">
         <div
           class="dataGridRow"
-          *ngFor="let record of records"
+          *ngFor="let record of settings.restList"
           [className]="_getRowClass(record)"
           (click)="rowClicked(record)"
         >
@@ -135,7 +135,7 @@
               <button
                 mat-menu-item
                 *ngIf="b.visible!(record)"
-                (click)="b.click!(record)"
+                (click)="clickRowButton(b, record)"
               >
                 <mat-icon *ngIf="b.icon">{{ b.icon }}</mat-icon
                 >{{ getButtonText(b, record) }}
@@ -192,7 +192,7 @@
   </div>
   <div
     class="dataGridFooterArea"
-    *ngIf="records && settings.settings?.showPagination"
+    *ngIf="settings.restList && settings.settings?.showPagination"
   >
     <div class="dataGridFooterButtonGroup">
       <button mat-icon-button (click)="settings.userChooseColumns()">
@@ -230,7 +230,9 @@
 
       <button
         mat-icon-button
-        [disabled]="!(records.items && records.items.length > 0)"
+        [disabled]="
+          !(settings.restList.items && settings.restList.items.length > 0)
+        "
         (click)="settings.nextPage()"
       >
         <mat-icon>{{
@@ -243,6 +245,19 @@
         (click)="settings.addNewRow()"
       >
         <mat-icon>add</mat-icon>
+      </button>
+      <button
+        mat-icon-button
+        *ngIf="showSaveAllButton()"
+        (click)="saveAllClick()"
+        style="line-height: 36px; max-height: 28px"
+      >
+        <mat-icon
+          [matTooltip]="saveAllText()"
+          class="row-button"
+          style="font-size: 24px"
+          >done_all</mat-icon
+        >
       </button>
     </div>
     <div *ngIf="settings.showSelectColumn" class="selectColumnsArea">

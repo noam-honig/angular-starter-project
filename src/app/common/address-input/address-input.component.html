@@ -2,7 +2,7 @@
   appearance="outline"
   class="full-width-form-field dense-form-field"
 >
-  <mat-label>{{ caption ? caption : field.metadata?.caption }}</mat-label>
+  <mat-label>{{ caption ? caption : field.metadata.caption }}</mat-label>
   <input
     #theId
     matInput
@@ -11,6 +11,7 @@
     [errorStateMatcher]="ngErrorStateMatches"
     autocomplete="false"
     (input)="checkInput()"
+    (blur)="onBlur()"
   />
   <mat-error *ngIf="getError()" id="theId">{{ getError() }}</mat-error>
 </mat-form-field>

@@ -54,3 +54,5 @@ export class DataAreaSettings<rowType = any> {
 export type DataAreaFieldsSetting<rowType = any> =
   | DataControlInfo<rowType>
   | DataControlInfo<rowType>[]
+
+  

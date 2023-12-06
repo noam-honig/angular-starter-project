@@ -68,15 +68,30 @@ export class DataFilterInfoComponent {
     )
 
     if (this.filterColumnToAdd) {
-      await openDialog(FilterDialogComponent, (x) => (x.info = this))
+      await this.showFilterDialog()
     }
 
     this.showAddFilter = true
     this.filterColumnToAdd = undefined!
   }
+  private async showFilterDialog() {
+    if (this.filterColumnToAdd.customFilter) {
+      await this.filterColumnToAdd.customFilter((filterValue) => {
+        if (filterValue === undefined) {
+          this.settings.columns.clearFilter(this.filterColumnToAdd)
+        } else {
+          this.settings.filterHelper.filterRow[
+            (this.filterColumnToAdd.field as FieldMetadata).key
+          ] = filterValue
+          this.settings.columns.filterRows(this.filterColumnToAdd)
+        }
+      })
+    } else await openDialog(FilterDialogComponent, (x) => (x.info = this))
+  }
+
   public async editFilter(col: FieldMetadata) {
     this.filterColumnToAdd = this.settings.origList.find((x) => x.field == col)!
-    await openDialog(FilterDialogComponent, (x) => (x.info = this))
+    await this.showFilterDialog()
   }
   confirmEditFilter() {
     this.settings.columns.filterRows(this.filterColumnToAdd)

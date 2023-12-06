@@ -82,6 +82,7 @@ export class AppComponent implements OnInit {
     let name = route.path
     if (route.data && route.data['name']) name = route.data['name']
     return name
+    return ''
   }
 
   currentTitle() {
@@ -94,13 +95,17 @@ export class AppComponent implements OnInit {
       }
     return 'angular-starter-project'
   }
+  doesNotRequireLogin() {
+    return this.activeRoute?.snapshot?.firstChild?.data?.['noLogin']
+  }
 
   shouldDisplayRoute(route: Route) {
     if (
       !(
-        route.path &&
-        route.path.indexOf(':') < 0 &&
-        route.path.indexOf('**') < 0
+        this.routeName(route) &&
+        (route.path || '').indexOf(':') < 0 &&
+        (route.path || '').indexOf('**') < 0 &&
+        !route.data?.['hide']
       )
     )
       return false

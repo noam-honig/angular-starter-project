@@ -7,14 +7,21 @@ import {
 } from 'common-ui-elements/interfaces'
 import { getFields } from 'remult'
 import { terms } from '../../terms'
+import { button } from '../UITools'
+import { DialogConfig } from '../../common-ui-elements/src/angular/DialogConfig'
+import { Dialog } from '@angular/cdk/dialog'
 
+@DialogConfig({
+  maxWidth: '99vw',
+  panelClass: 'slim-dialog',
+})
 @Component({
   templateUrl: './data-area-dialog.component.html',
   styleUrls: ['./data-area-dialog.component.scss'],
 })
 export class DataAreaDialogComponent implements OnInit {
   args!: {
-    title: string
+    title?: string
     helpText?: string
     fields?: DataAreaFieldsSetting<any>[]
     areaSettings?: IDataAreaSettings
@@ -67,9 +74,4 @@ export class DataAreaDialogComponent implements OnInit {
       this.dialogRef.close()
     })
   }
-}
-
-export interface button {
-  text: string
-  click: (close: () => void) => void
 }

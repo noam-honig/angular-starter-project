@@ -27,11 +27,6 @@ export class SignInController extends ControllerBase {
   })
   password = ''
 
-  @Fields.boolean({
-    caption: terms.rememberOnThisDevice,
-  })
-  rememberOnThisDevice = false
-
   @BackendMethod({ allowed: true })
   /**
    * This sign mechanism represents a simplistic sign in management utility with the following behaviors
@@ -71,13 +66,13 @@ export class SignInController extends ControllerBase {
     }
 
     if (result) {
-      return setSessionUser(result, this.rememberOnThisDevice)
+      return setSessionUser(result)
     }
     throw new Error(terms.invalidSignIn)
   }
   @BackendMethod({ allowed: Allow.authenticated })
   static signOut() {
-    setSessionUser(undefined!, true)
+    setSessionUser(undefined!)
   }
   @BackendMethod({ allowed: true })
   static currentUser() {

@@ -22,16 +22,12 @@ import {
 } from '@angular/common/http'
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
 import { BusyService, LoaderInterceptor } from './wait/busy-service'
-import {
-  MatDialog,
-  MatDialogConfig,
-  MatDialogModule,
-} from '@angular/material/dialog'
+import { MatDialog, MatDialogModule } from '@angular/material/dialog'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { WaitComponent } from './wait/wait.component'
 import { MatFormFieldModule } from '@angular/material/form-field'
 import { MatInputModule } from '@angular/material/input'
-
+import { MatSelectModule } from '@angular/material/select'
 import { DataArea2Component } from './data-area/dataArea2'
 import { SelectValueDialogComponent } from './add-filter-dialog/add-filter-dialog.component'
 import { MatButtonModule } from '@angular/material/button'
@@ -45,6 +41,9 @@ import { BidiModule } from '@angular/cdk/bidi'
 import { Repository, EntityOrderBy, EntityFilter, EntityMetadata } from 'remult'
 import { CommonUIElementsPluginsService } from './CommonUIElementsPluginsService'
 
+import { GridDialogComponent } from '../../../common/grid-dialog/grid-dialog.component'
+import { dialogConfigMember } from './dialogConfigMember'
+
 @NgModule({
   declarations: [
     DataControl2Component,
@@ -55,6 +54,7 @@ import { CommonUIElementsPluginsService } from './CommonUIElementsPluginsService
     DataControl3Component,
     SelectValueDialogComponent,
     FilterDialogComponent,
+    GridDialogComponent,
   ],
   imports: [
     FormsModule,
@@ -73,6 +73,7 @@ import { CommonUIElementsPluginsService } from './CommonUIElementsPluginsService
     MatCheckboxModule,
     MatMenuModule,
     BidiModule,
+    MatSelectModule,
   ],
   providers: [
     {
@@ -104,13 +105,6 @@ export class CommonUIElementsModule {
       BusyService.singleInstance.startBusyWithProgress()
   }
 }
-export function DialogConfig(config: MatDialogConfig) {
-  return function (target: any) {
-    target[dialogConfigMember] = config
-    return target
-  }
-}
-const dialogConfigMember = Symbol('dialogConfigMember')
 var _matDialog: MatDialog
 
 export async function openDialog<T, C>(
@@ -120,11 +114,15 @@ export async function openDialog<T, C>(
 ): Promise<T> {
   let ref = _matDialog.open(component, (component as any)[dialogConfigMember])
   if (setParameters) setParameters(ref.componentInstance)
+  ;(ref.componentInstance as WantsToCloseDialog).closeDialog = () => ref.close()
   var r
   if (ref.beforeClosed) r = await ref.beforeClosed().toPromise()
   //@ts-ignore
   else r = await ref.beforeClose().toPromise()
-
   if (returnAValue) return returnAValue(ref.componentInstance)
   return r
+}
+
+export interface WantsToCloseDialog {
+  closeDialog: VoidFunction
 }

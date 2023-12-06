@@ -8,6 +8,7 @@ import {
   getEntityRef,
   Repository,
   Filter,
+  MembersToInclude,
 } from 'remult'
 
 import { FieldCollection } from './column-collection'
@@ -19,8 +20,19 @@ import {
 } from './data-control-interfaces'
 import { DataList } from './dataList'
 import { FilterHelper } from './filter-helper'
+import { User } from '../../../users/user'
 
 export class GridSettings<rowType = any> {
+  addNewRowToGrid(v: rowType) {
+    setTimeout(() => {
+      const refId = getEntityRef(v).getId()
+      const index = this.items.findIndex(
+        (x) => getEntityRef(x).getId() == refId
+      )
+      if (index >= 0) this.items.splice(index, 1)
+      this.items.splice(0, 0, v)
+    }, 300)
+  }
   undoChanges(r: rowType) {
     let helper = this.getRowHelper(r)
     helper.undoChanges()
@@ -28,10 +40,15 @@ export class GridSettings<rowType = any> {
   }
   constructor(
     public repository: Repository<rowType>,
-    public settings?: IDataSettings<rowType>
+    public settings: IDataSettings<rowType>
   ) {
     if (!settings) this.settings = settings = {}
-    this.restList = new DataList<rowType>(repository)
+    if (this.settings.liveQuery === undefined) this.settings.liveQuery = true
+    this.restList = new DataList<rowType>(
+      repository,
+      settings.listRefreshed,
+      settings.liveQuery
+    )
     if (repository) {
       this.filterHelper.filterRow = <rowType>repository.create()
       repository.addEventListener({
@@ -234,11 +251,7 @@ export class GridSettings<rowType = any> {
     )
   }
   saveCurrentRow() {
-    if (
-      this.currentRowAsRestListItemRow() &&
-      this.currentRowAsRestListItemRow()!.save!
-    )
-      this.currentRowAsRestListItemRow()!.save()
+    this.saveRow(this.currentRow)
   }
 
   allowUpdate = false
@@ -253,8 +266,8 @@ export class GridSettings<rowType = any> {
   onValidate?: (row: rowType) => Promise<any> | any
   onEnterRow!: (row: rowType) => void
   onNewRow!: (row: rowType) => void
-  _doSavingRow(s: rowType) {
-    return getEntityRef(s).save()
+  saveRow(s: rowType) {
+    this.restList.save(s)
   }
   caption!: string
 
@@ -380,51 +393,65 @@ export class GridSettings<rowType = any> {
   }
 
   totalRows!: number
-
-  private _loaded = false
+  unsubscribe = () => {}
+  loaded = false
   async reloadData() {
     let opt: FindOptions<rowType> = await this._internalBuildFindOptions()
     this.columns.autoGenerateColumnsBasedOnData(this.repository.metadata)
-    if (!this._loaded) {
-      this._loaded = true
+    if (!this.loaded) {
+      this.loaded = true
       if (this.settings?.columnOrderStateKey) {
         new columnOrderAndWidthSaver(this).load(
           this.settings.columnOrderStateKey
         )
       }
     }
-    let result = this.restList.get(opt).then((rows) => {
-      this.selectedRows = this.selectedRows.map((s) => {
-        let id = getEntityRef(s).getId()
-        let r = rows.find((r) => getEntityRef(r).getId() == id)
-        if (r !== undefined) return r
-        return s
+    this.unsubscribe()
+    let resolved = false
+    return new Promise<rowType[]>((res) => {
+      this.unsubscribe = this.restList.get(opt, (rows) => {
+        this.selectedRows = this.selectedRows.map((s) => {
+          let id = getEntityRef(s).getId()
+          let r = rows.find((r) => getEntityRef(r).getId() == id)
+          if (r !== undefined) return r
+          return s
+        })
+        let currentRow =
+          this.currentRow &&
+          this.restList.items.find(
+            (y) =>
+              this.repository.getEntityRef(y).getId() ===
+              this.repository.getEntityRef(this.currentRow).getId()
+          )
+        if (this.restList.items.length == 0) {
+          this.setCurrentRow(undefined!)
+        } else {
+          this.setCurrentRow(currentRow || this.restList.items[0])
+        }
+        if (this.settings?.rowsLoaded) {
+          this.settings?.rowsLoaded(this.restList.items)
+        }
+        if (!resolved) {
+          resolved = true
+          res(this.restList.items)
+        }
+        return this.restList
       })
-
-      if (this.restList.items.length == 0) {
-        this.setCurrentRow(undefined!)
-      } else {
-        this.setCurrentRow(this.restList.items[0])
+      if (this.settings && !(this.settings.knowTotalRows === false)) {
+        this.restList.count(opt.where).then((x) => {
+          this.totalRows = x
+        })
       }
-      if (this.settings?.rowsLoaded) {
-        this.settings?.rowsLoaded(this.restList.items)
-      }
-      return this.restList
     })
-    if (this.settings && !(this.settings.knowTotalRows === false)) {
-      this.restList.count(opt.where).then((x) => {
-        this.totalRows = x
-      })
-    }
-    return result
   }
 
-  private restList: DataList<rowType>
+  restList: DataList<rowType>
   async _internalBuildFindOptions() {
     let opt: FindOptions<rowType> = {}
     if (this.settings!.where) {
       opt.where = await Filter.resolve(this.settings!.where)
     }
+    if (this.settings?.include) opt.include = this.settings.include
     if (this.settings!.orderBy) opt.orderBy = this.settings!.orderBy
 
     if (this._currentOrderBy)
@@ -472,7 +499,7 @@ export interface IDataSettings<rowType> {
   rowCssClass?: (row: rowType) => string
   rowButtons?: RowButton<rowType>[]
   gridButtons?: GridButton[]
-
+  include?: MembersToInclude<rowType>
   /** filters the data
    * @example
    * await taskRepo.find({where: { completed:false }})
@@ -509,11 +536,13 @@ export interface IDataSettings<rowType> {
   newRow?: (r: rowType) => void
   numOfColumnsInGrid?: number
   caption?: string
+  listRefreshed?: VoidFunction
+  liveQuery?: boolean
 }
 export interface RowButton<rowType> {
   name?: string
   visible?: (r: rowType) => boolean
-  click?: (r: rowType) => void
+  click: (r: rowType) => void
   showInLine?: boolean
   textInMenu?: string | ((row: rowType) => string)
   icon?: string

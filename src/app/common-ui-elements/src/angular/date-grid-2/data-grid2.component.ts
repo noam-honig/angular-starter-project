@@ -1,4 +1,10 @@
-import { Component, OnChanges, Input, ViewChild } from '@angular/core'
+import {
+  Component,
+  OnChanges,
+  Input,
+  ViewChild,
+  OnDestroy
+} from '@angular/core'
 
 import { DataFilterInfoComponent } from '../data-filter-info/data-filter-info.component'
 import { FieldMetadata, Remult, Entity } from 'remult'
@@ -15,13 +21,23 @@ import { CommonUIElementsPluginsService } from '../CommonUIElementsPluginsServic
   templateUrl: `./data-grid2.component.html`,
   styleUrls: ['./data-grid2.component.scss'],
 })
-export class DataGrid2Component implements OnChanges {
+export class DataGrid2Component implements OnChanges, OnDestroy {
+  async clickRowButton(b: RowButton<any>, r: any) {
+    try {
+      await b.click!(r)
+    } catch (err: any) {
+      alert(err.message)
+    }
+  }
   constructor(
     private remult: Remult,
     dir: Directionality,
     public plugin: CommonUIElementsPluginsService
   ) {
     this.rightToLeft = dir.value === 'rtl'
+  }
+  ngOnDestroy(): void {
+    this.settings.unsubscribe()
   }
 
   async addCol(c: DataControlSettings) {
@@ -101,8 +117,8 @@ export class DataGrid2Component implements OnChanges {
   @Input() displayButtons = true
   @Input() displayVCR = true
 
-  @Input() records: any
   @Input() settings!: GridSettings
+  prevSettings?: GridSettings
 
   getAreaSettings() {
     return this.settings as any
@@ -174,9 +190,11 @@ export class DataGrid2Component implements OnChanges {
   }
 
   showSaveAllButton() {
-    return this.settings.items.find((x) =>
-      this.settings.getRowHelper(x).wasChanged()
-    )
+    if (this.settings.allowUpdate)
+      return this.settings.items.find((x) =>
+        this.settings.getRowHelper(x).wasChanged()
+      )
+    return false
   }
   saveAllText() {
     return this.rightToLeft
@@ -201,6 +219,8 @@ export class DataGrid2Component implements OnChanges {
 
   ngOnChanges(): void {
     if (!this.settings) return
+    if (this.prevSettings) this.prevSettings.unsubscribe()
+    this.prevSettings = this.settings
 
     this.rowButtons = []
     this.gridButtons = []
@@ -236,8 +256,8 @@ export class DataGrid2Component implements OnChanges {
         showInLine: true,
         textInMenu: () => (this.rightToLeft ? 'שמור' : 'save'),
         click: (r) => {
-          this.settings._doSavingRow(r)
-        },
+          this.settings.saveRow(r)
+        }
       })
       this.addButton({
         name: '',
@@ -275,10 +295,8 @@ export class DataGrid2Component implements OnChanges {
       for (let b of this.settings._buttons) {
         this.addButton(b)
       }
-    if (!this.records && this.settings) {
-      this.settings.reloadData().then((r: any) => {
-        this.records = r
-      })
+    if (this.settings && !this.settings.loaded) {
+      this.settings.reloadData()
     }
   }
 

@@ -4,39 +4,73 @@ import { Remult } from 'remult'
 
 import { YesNoQuestionComponent } from './yes-no-question/yes-no-question.component'
 import {
+  BusyService,
   CommonUIElementsPluginsService,
   openDialog,
   SelectValueDialogComponent,
 } from 'common-ui-elements'
 import { terms } from '../terms'
-import { InputAddressResult, UITools } from './UITools'
+import {
+  GridDialogArgs,
+  InputAddressResult,
+  AreaDialogArgs,
+  UITools,
+  MultiSelectOptions,
+} from './UITools'
 import { TextAreaDataControlComponent } from './textarea-data-control/textarea-data-control.component'
-import { AddressInputComponent } from '../common-ui-elements/address-input/address-input.component'
+import { AddressInputComponent } from './address-input/address-input.component'
+import { User } from '../users/user'
+import { InputImageComponent } from './input-image/input-image.component'
+import { MultiSelectListDialogComponent } from './multi-select-list-dialog/multi-select-list-dialog.component'
 
 @Injectable()
 export class UIToolsService implements UITools {
+  report(what: string, context: string, taskId?: string) {}
   constructor(
     zone: NgZone,
     private snackBar: MatSnackBar,
-    commonUIPlugin: CommonUIElementsPluginsService
+    commonUIPlugin: CommonUIElementsPluginsService,
+    private busy: BusyService
   ) {
     this.mediaMatcher.addListener((mql) =>
       zone.run(() => /*this.mediaMatcher = mql*/ ''.toString())
     )
     this.enhanceFieldOptionsAndDataControlOptions(commonUIPlugin)
   }
+  multiSelectValueDialog<T>(args: MultiSelectOptions<T>): Promise<void> {
+    return openDialog(MultiSelectListDialogComponent, (x) => x.args(args))
+  }
 
   info(info: string): any {
-    this.snackBar.open(info, 'close', { duration: 4000 })
+    this.snackBar.open(info, 'סגור', { duration: 4000 })
   }
-  async error(err: any) {
+  async error(err: any, taskId?: string) {
+    const message = extractError(err)
+    if (message == 'Network Error') return
+    this.report('שגיאה', message, taskId)
     return await openDialog(
       YesNoQuestionComponent,
       (d) =>
         (d.args = {
-          message: extractError(err),
+          message,
           isAQuestion: false,
         })
+    )
+  }
+  async gridDialog(args: GridDialogArgs): Promise<void> {
+    await openDialog(
+      (
+        await import('./grid-dialog/grid-dialog.component')
+      ).GridDialogComponent,
+      (x) => (x.args = args)
+    )
+  }
+  async areaDialog(args: AreaDialogArgs): Promise<void> {
+    await openDialog(
+      (
+        await import('./data-area-dialog/data-area-dialog.component')
+      ).DataAreaDialogComponent,
+      (x) => (x.args = args)
     )
   }
   private mediaMatcher: MediaQueryList = matchMedia(`(max-width: 720px)`)
@@ -56,6 +90,7 @@ export class UIToolsService implements UITools {
       terms.areYouSureYouWouldLikeToDelete + ' ' + of + '?'
     )
   }
+
   async selectValuesDialog<T extends { caption?: string }>(args: {
     values: T[]
     onSelect: (selected: T) => void
@@ -67,7 +102,7 @@ export class UIToolsService implements UITools {
     commonUIPlugin: CommonUIElementsPluginsService
   ) {
     commonUIPlugin.dataControlAugmenter = (fieldMetadata, options) => {
-      if (fieldMetadata.options.clickWithUI) {
+      if (fieldMetadata?.options.clickWithUI) {
         if (!options.click) {
           options.click = (entity, fieldRef) =>
             fieldMetadata.options.clickWithUI!(this, entity, fieldRef)
@@ -75,6 +110,13 @@ export class UIToolsService implements UITools {
       }
       if (fieldMetadata.options.customInput) {
         fieldMetadata.options.customInput({
+          image() {
+            {
+              options.customComponent = {
+                component: InputImageComponent,
+              }
+            }
+          },
           textarea() {
             options.customComponent = {
               component: TextAreaDataControlComponent,
@@ -127,6 +169,7 @@ export function extractError(err: any): string {
     }
   }
   if (err.rejection) return extractError(err.rejection) //for promise failed errors and http errors
+  if (err.httpStatusCode == 403) return 'אינך מורשה פעולה זו'
   if (err.message) {
     let r = err.message
     if (err.error && err.error.message) r = err.error.message

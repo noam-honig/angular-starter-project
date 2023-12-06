@@ -10,6 +10,7 @@ export const terms = {
   hello: 'Hello',
   invalidOperation: 'Invalid Operation',
   admin: 'admin',
+  disabled: 'disabled',
   yes: 'Yes',
   no: 'No',
   ok: 'Ok',

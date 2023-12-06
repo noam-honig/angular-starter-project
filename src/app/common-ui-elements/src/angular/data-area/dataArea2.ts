@@ -51,7 +51,7 @@ export class DataArea2Component implements OnChanges {
     }
   }
   getColWidth(map: DataControlSettings) {
-    let x = this.settings.fields!.__dataControlStyle(map)
+    let x = this.settings.fields?.__dataControlStyle(map)
 
     return x
   }

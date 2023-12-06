@@ -22,7 +22,7 @@ export class UsersComponent implements OnInit {
   }
 
   users: GridSettings<User> = new GridSettings<User>(remult.repo(User), {
-    allowDelete: true,
+    allowDelete: false,
     allowInsert: true,
     allowUpdate: true,
     columnOrderStateKey: 'users',
@@ -30,7 +30,8 @@ export class UsersComponent implements OnInit {
     orderBy: { name: 'asc' },
     rowsInPage: 100,
 
-    columnSettings: (users) => [users.name, users.admin],
+    columnSettings: (user) => [user.name, user.admin, user.disabled],
+    rowCssClass: (row) => (row.disabled ? 'canceled' : ''),
     gridButtons: [
       {
         name: 'Excel',

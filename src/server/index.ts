@@ -7,17 +7,17 @@ import compression from 'compression'
 import { api } from './api'
 import session from 'cookie-session'
 
-import { SignInController } from '../app/users/SignInController'
-
 async function startup() {
   const app = express()
   app.use(sslRedirect())
   app.use(
+    '/api',
     session({
       secret:
         process.env['NODE_ENV'] === 'production'
           ? process.env['SESSION_SECRET']
           : 'my secret',
+      maxAge: 365 * 24 * 60 * 60 * 1000,
     })
   )
   app.use(compression())
