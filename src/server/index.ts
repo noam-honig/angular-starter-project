@@ -1,5 +1,3 @@
-import { config } from 'dotenv'
-config() //loads the configuration from the .env file
 import express from 'express'
 import sslRedirect from 'heroku-ssl-redirect'
 import helmet from 'helmet'
@@ -27,7 +25,6 @@ async function startup() {
 
   app.use(express.static('dist/angular-starter-project'))
   app.use('/*', async (req, res) => {
-    req.session
     if (req.headers.accept?.includes('json')) {
       console.log(req)
       res.status(404).json('missing route: ' + req.originalUrl)
