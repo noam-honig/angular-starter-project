@@ -3,7 +3,7 @@ import {
   OnChanges,
   Input,
   ViewChild,
-  OnDestroy
+  OnDestroy,
 } from '@angular/core'
 
 import { DataFilterInfoComponent } from '../data-filter-info/data-filter-info.component'
@@ -213,7 +213,7 @@ export class DataGrid2Component implements OnChanges, OnDestroy {
     await Promise.all(
       this.settings.items
         .filter((x) => this.settings.getRowHelper(x).wasChanged())
-        .map((x) => this.settings.getRowHelper(x).save())
+        .map((x) => this.settings.saveRow(x))
     )
   }
 
@@ -257,7 +257,7 @@ export class DataGrid2Component implements OnChanges, OnDestroy {
         textInMenu: () => (this.rightToLeft ? 'שמור' : 'save'),
         click: (r) => {
           this.settings.saveRow(r)
-        }
+        },
       })
       this.addButton({
         name: '',

@@ -110,6 +110,8 @@ export class UIToolsService implements UITools {
       }
       if (fieldMetadata.options.valueList)
         options.valueList = fieldMetadata.options.valueList
+      if (fieldMetadata.options.width)
+        options.width = fieldMetadata.options.width
       if (fieldMetadata.options.customInput) {
         fieldMetadata.options.customInput({
           image() {

@@ -1,17 +1,17 @@
-import { FieldRef, Fields, StringFieldOptions } from 'remult'
+import { Field, FieldOptions, FieldRef } from 'remult'
 
-export function ValueListField<entityType>(
-  valueList: string[],
-  options?: StringFieldOptions<entityType>
+export function ValueListField<entityType, valueType>(
+  valueList: readonly valueType[],
+  options?: FieldOptions<entityType, valueType>
 ) {
   const validate:
     | ((
         entity: entityType,
-        fieldRef: FieldRef<entityType, string>
+        fieldRef: FieldRef<entityType, valueType>
       ) => any | Promise<any>)
     | ((
         entity: entityType,
-        fieldRef: FieldRef<entityType, string>
+        fieldRef: FieldRef<entityType, valueType>
       ) => any | Promise<any>)[] = [
     (_, f) => {
       if (!f.value) return
@@ -25,7 +25,7 @@ export function ValueListField<entityType>(
     if (!Array.isArray(options.validate)) options.validate = [options.validate]
     validate.push(...options.validate)
   }
-  return Fields.string({
+  return Field<entityType, valueType>(undefined, {
     valueList: valueList.map((x) => ({ id: x, caption: x })),
     ...options,
     validate,

@@ -69,6 +69,20 @@ export class DataList<T> implements Iterable<T> {
     const ref = this.repository.getEntityRef(x)
     const isNew = ref.isNew()
     let r = await ref.save()
+    if (
+      isNew &&
+      this.items.filter(
+        (r) => this.repository.getEntityRef(r).getId() == ref.getId()
+      ).length > 1
+    ) {
+      this.items.splice(
+        this.items.findIndex(
+          (r) => this.repository.getEntityRef(r).getId() == ref.getId()
+        ),
+        1
+      )
+      this.listRefreshed && this.listRefreshed()
+    }
 
     return r
   }

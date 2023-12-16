@@ -56,6 +56,7 @@ declare module 'remult' {
       | Promise<ValueListItem[]>
       | ((remult: Remult) => Promise<ValueListItem[]>)
       | ((remult: Remult) => ValueListItem[])
+    width?: string
   }
 }
 

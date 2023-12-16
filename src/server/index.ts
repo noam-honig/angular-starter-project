@@ -4,6 +4,8 @@ import helmet from 'helmet'
 import compression from 'compression'
 import { api } from './api'
 import session from 'cookie-session'
+import path from 'path'
+import fs from 'fs'
 
 async function startup() {
   const app = express()
@@ -23,7 +25,11 @@ async function startup() {
 
   app.use(api)
 
-  app.use(express.static('dist/angular-starter-project'))
+  let dist = path.resolve('dist/angular-starter-project')
+  if (!fs.existsSync(dist)) {
+    dist = path.resolve('../angular-starter-project')
+  }
+  app.use(express.static(dist))
   app.use('/*', async (req, res) => {
     if (req.headers.accept?.includes('json')) {
       console.log(req)
@@ -31,7 +37,7 @@ async function startup() {
       return
     }
     try {
-      res.sendFile(process.cwd() + '/dist/angular-starter-project/index.html')
+      res.sendFile(dist + '/index.html')
     } catch (err) {
       res.sendStatus(500)
     }

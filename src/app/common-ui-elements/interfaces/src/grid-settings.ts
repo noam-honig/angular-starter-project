@@ -20,7 +20,6 @@ import {
 } from './data-control-interfaces'
 import { DataList } from './dataList'
 import { FilterHelper } from './filter-helper'
-import { User } from '../../../users/user'
 
 export class GridSettings<rowType = any> {
   addNewRowToGrid(v: rowType) {

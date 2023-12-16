@@ -4,27 +4,19 @@ export function OnlyAllowIsraeliPhones(_: any, ref: FieldRef<any, string>) {
   if (ref.value.startsWith('+')) throw Error('רק טלפונים ישראלים נתמכים כרגע')
 }
 
-export function sendWhatsappToPhone(
-  phone: string,
-  smsMessage: string,
-  test = false
-) {
+export function whatsappUrl(phone: string, smsMessage: string) {
   phone = fixPhoneInput(phone)
   if (phone.startsWith('0')) {
     phone = `+972` + phone.substring(1)
   }
 
   if (phone.startsWith('+')) phone = phone.substring(1)
-  if (test)
-    window.open(
-      'whatsapp://send/?phone=' + phone + '&text=' + encodeURI(smsMessage),
-      '_blank'
-    )
-  else
-    window.open(
-      'https://wa.me/' + phone + '?text=' + encodeURI(smsMessage),
-      '_blank'
-    )
+
+  return 'https://wa.me/' + phone + '?text=' + encodeURI(smsMessage)
+}
+
+export function sendWhatsappToPhone(phone: string, smsMessage: string) {
+  window.open(whatsappUrl(phone, smsMessage), '_blank')
 }
 
 export function fixPhoneInput(s: string) {
