@@ -49,7 +49,7 @@ export class SignInController extends ControllerBase {
     if (u) {
       if (!u.password) {
         // if the user has no password defined, the first password they use is their password
-        u.hashAndSetPassword(this.password)
+        await u.hashAndSetPassword(this.password)
         await u.save()
       }
 
