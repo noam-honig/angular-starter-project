@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core'
+import { NgModule, NgZone } from '@angular/core'
 import { DataControl2Component } from './data-control/data-control2.component'
 import { DataControl3Component } from './data-control/data-control3.component'
 import { CommonModule } from '@angular/common'
@@ -96,7 +96,9 @@ import { dialogConfigMember } from './dialogConfigMember'
   ],
 })
 export class CommonUIElementsModule {
-  constructor(http: HttpClient, dialog: MatDialog) {
+  constructor(http: HttpClient, dialog: MatDialog, zone: NgZone) {
+    remult.apiClient.wrapMessageHandling = async (x) =>
+      await zone.run(() => x())
     remult.apiClient.httpClient = http
     _matDialog = dialog
     actionInfo.runActionWithoutBlockingUI = async (x) =>
