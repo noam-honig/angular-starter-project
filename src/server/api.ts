@@ -7,9 +7,10 @@ import { initRequest } from './server-session'
 import { config } from 'dotenv'
 config() //loads the configuration from the .env file
 
+export const entities = [User]
 export const api = remultExpress({
-  entities: [User],
   controllers: [SignInController, UpdatePasswordController],
+  entities,
   initRequest,
   dataProvider: async () => {
     if (process.env['NODE_ENV'] === 'production')
