@@ -137,6 +137,12 @@ export class FieldCollection<rowType = any> {
     }
   >()
   async buildDropDown(s: DataControlSettings) {
+    const fieldMetadata = getFieldDefinition(s.field!)!;
+    if (
+      s.valueList === undefined &&
+      fieldMetadata.options.valueList !== undefined
+    )
+      s.valueList = fieldMetadata.options.valueList; //
     if (s.valueList) {
       let orig = s.valueList
       if (s.valueListChangeKey) {
