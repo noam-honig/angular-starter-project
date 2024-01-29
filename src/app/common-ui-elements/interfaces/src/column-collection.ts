@@ -534,7 +534,7 @@ export async function getEntityValueList<T>(
     return {
       id: repository
         .getEntityRef(x)
-        .fields.find(args!.idField!(repository.metadata)).value,
+        .fields.find(args!.idField!(repository.metadata)).value + '',
       caption: repository
         .getEntityRef(x)
         .fields.find(args!.captionField!(repository.metadata)).value,
