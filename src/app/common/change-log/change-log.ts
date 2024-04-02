@@ -59,7 +59,7 @@ export async function recordChanges<entityType>(
   options?: ColumnDeciderArgs<entityType>
 ) {
   if (isBackend()) {
-    let changes = [] as change[]
+    const changes = [] as change[]
     const decider = new FieldDecider(self, options)
     const isNew = options?.forceNew || e.isNew
     const changeDate = options?.forceDate || new Date()
