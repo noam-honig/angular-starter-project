@@ -283,7 +283,7 @@ export class GridSettings<rowType = any> {
     return this.reloadData()
   }
   previousPage() {
-    if (this.page <= 1) return
+    if (this.page <= 1) return null; /*@#CHANGED@# */
     this.page--
     return this.reloadData()
   }
