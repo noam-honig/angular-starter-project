@@ -82,7 +82,7 @@ export interface button {
 export interface AreaDialogArgs {
   title?: string
   helpText?: string
-  fields: DataAreaFieldsSetting<any>[]
+  fields: DataAreaFieldsSetting<unknown>[]
   ok: () => void
   cancel?: () => void
   validate?: () => Promise<void>
