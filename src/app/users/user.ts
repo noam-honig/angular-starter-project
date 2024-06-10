@@ -29,7 +29,9 @@ import { terms } from '../terms'
 })
 export class User extends IdEntity {
   @Fields.string({
-    validate: [Validators.required, Validators.uniqueOnBackend],
+    validate: [Validators.required, Validators.uniqueOnBackend, (user) => {
+      if (user.name.length < 3) throw "Too Short!!!"
+    }],
     caption: terms.username,
   })
   name = ''
@@ -45,9 +47,11 @@ export class User extends IdEntity {
     caption: terms.admin,
   })
   admin = false
+  
   @Fields.boolean({
     allowApiUpdate: Roles.admin,
     caption: terms.disabled,
+    // validate: Validators.required,
   })
   disabled = false
 

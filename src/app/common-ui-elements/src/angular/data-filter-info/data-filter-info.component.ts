@@ -13,12 +13,12 @@ import { FilterDialogComponent } from '../filter-dialog/filter-dialog.component'
   templateUrl: './data-filter-info.component.html',
   styles: [
     `
-      .link {
-        cursor: pointer;
-        color: blue;
-        text-decoration: underline;
-      }
-    `,
+           .link {
+             cursor: pointer;
+             color: blue;
+             text-decoration: underline;
+           }
+         `,
   ],
 })
 export class DataFilterInfoComponent {
