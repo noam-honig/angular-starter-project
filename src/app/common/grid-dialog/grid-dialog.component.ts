@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core'
-import { MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog'
+import { MatDialogRef } from '@angular/material/dialog'
 
 import { GridDialogArgs, button } from '../UITools'
 import { DialogConfig } from '../../common-ui-elements/src/angular/DialogConfig'

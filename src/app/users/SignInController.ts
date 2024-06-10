@@ -17,7 +17,8 @@ import { setSessionUser } from '../../server/server-session'
 export class SignInController extends ControllerBase {
   @Fields.string({
     caption: terms.username,
-    validate: Validators.required,
+    // validate: Validators.required,
+    validate: [Validators.required],
   })
   user = ''
   @Fields.string({
