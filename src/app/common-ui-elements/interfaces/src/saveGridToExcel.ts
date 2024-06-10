@@ -8,11 +8,18 @@ import {
 import { terms } from '../../../terms'
 import type { BusyService } from '../../src/angular/wait/busy-service'
 import { GridSettings } from './grid-settings'
-export async function saveToExcel<
-  E = any,
-  T extends GridSettings<E> = GridSettings<any>
->(
-  grid: T,
+
+// export async function saveToExcel<
+//   E = any,
+//   T extends GridSettings<E> = GridSettings<any>
+// >(
+//   grid: T,
+//   fileName: string,
+//   busyService: BusyService,
+//   args?: {
+/*@#CHANGED @#*/
+export async function saveToExcel<E>(
+  grid: GridSettings<E>,
   fileName: string,
   busyService: BusyService,
   args?: {
