@@ -23,7 +23,6 @@ export class DataAreaDialogComponent implements OnInit {
   args!: {
     title?: string
     helpText?: string
-    // fields?: any //@#CHANGED@# DataAreaFieldsSetting<any>[]
     fields?: DataAreaFieldsSetting<unknown>[]
     areaSettings?: IDataAreaSettings
     object?: any

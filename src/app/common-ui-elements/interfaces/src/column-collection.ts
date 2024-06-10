@@ -97,7 +97,6 @@ export class FieldCollection<rowType = any> {
     for (let c of columns) {
       if (!c) continue
       let s: DataControlSettings<rowType>
-      // let x = c as DataControlSettings<rowType>
       let x = c as DataControlSettings<unknown>
       let col = c as FieldMetadata
       let ecol = c as FieldRef<any, any>

@@ -6,7 +6,7 @@
     "outDir": "./dist/out-tsc",
     "skipLibCheck": false,
     "forceConsistentCasingInFileNames": true,
-    "strict": true, /*@#CHANGED@#*/
+    "strict": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
@@ -21,17 +21,10 @@
     "esModuleInterop": true,
     "target": "ES2022",
     "module": "es2020",
-    "lib": [
-      "es2020",
-      "dom"
-    ],
+    "lib": ["es2020", "dom"],
     "paths": {
-      "common-ui-elements": [
-        "src/app/common-ui-elements"
-      ],
-      "common-ui-elements/interfaces": [
-        "src/app/common-ui-elements/interfaces"
-      ]
+      "common-ui-elements": ["src/app/common-ui-elements"],
+      "common-ui-elements/interfaces": ["src/app/common-ui-elements/interfaces"]
     },
     "useDefineForClassFields": false
   },
