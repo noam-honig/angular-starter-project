@@ -9,6 +9,7 @@ config() //loads the configuration from the .env file
 
 export const entities = [User]
 export const api = remultExpress({
+  admin:true,
   controllers: [SignInController, UpdatePasswordController],
   entities,
   initRequest,

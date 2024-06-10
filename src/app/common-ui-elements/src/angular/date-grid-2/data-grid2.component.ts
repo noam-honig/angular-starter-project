@@ -117,7 +117,8 @@ export class DataGrid2Component implements OnChanges, OnDestroy {
   @Input() displayButtons = true
   @Input() displayVCR = true
 
-  @Input() settings!: any //@#CHANGED@# GridSettings<any>; // Change this to 'any' for compatibility @#CHANGED@#
+  @Input() settings!: GridSettings<any>
+  // @Input() settings!: any //@#CHANGED@# GridSettings<any>; // Change this to 'any' for compatibility @#CHANGED@#
   // @Input() settings!: GridSettings 
   prevSettings?: GridSettings
 
@@ -190,10 +191,20 @@ export class DataGrid2Component implements OnChanges, OnDestroy {
     this.page--
   }
 
+  // showSaveAllButton() {
+  //   if (this.settings.allowUpdate)
+  //     return this.settings.items.find((x) =>
+  //       this.settings.getRowHelper(x).wasChanged()
+  //     )
+  //   return false
+  // }
+
   showSaveAllButton() {
     if (this.settings.allowUpdate)
-      return this.settings.items.find((x) =>
-        this.settings.getRowHelper(x).wasChanged()
+      return Boolean(
+        this.settings.items.find((x) =>
+          this.settings.getRowHelper(x).wasChanged()
+        )
       )
     return false
   }

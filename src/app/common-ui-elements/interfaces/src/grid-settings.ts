@@ -21,7 +21,7 @@ import {
 import { DataList } from './dataList'
 import { FilterHelper } from './filter-helper'
 
-export class GridSettings<rowType = any> {
+export class GridSettings<rowType = unknown> {
   addNewRowToGrid(v: rowType) {
     setTimeout(() => {
       const refId = getEntityRef(v).getId()
@@ -481,7 +481,7 @@ export class GridSettings<rowType = any> {
     return undefined!
   }
 }
-export interface IDataSettings<rowType> {
+export interface IDataSettings<rowType = unknown> {
   rowsLoaded?: (items: rowType[]) => void
   allowUpdate?: boolean
   allowInsert?: boolean

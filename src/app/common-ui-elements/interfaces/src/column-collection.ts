@@ -41,7 +41,7 @@ export class FieldCollection<rowType = any> {
       row: rowType,
       col: FieldMetadata
     ) => FieldRef<any, any>
-  ) {}
+  ) { }
   __showArea() {
     return this.showArea()
   }
@@ -97,7 +97,8 @@ export class FieldCollection<rowType = any> {
     for (let c of columns) {
       if (!c) continue
       let s: DataControlSettings<rowType>
-      let x = c as DataControlSettings<rowType>
+      // let x = c as DataControlSettings<rowType>
+      let x = c as DataControlSettings<unknown>
       let col = c as FieldMetadata
       let ecol = c as FieldRef<any, any>
       if ((!x.field && col.valueConverter) || ecol.metadata) {
@@ -137,12 +138,12 @@ export class FieldCollection<rowType = any> {
     }
   >()
   async buildDropDown(s: DataControlSettings) {
-    const fieldMetadata = getFieldDefinition(s.field!)!;
+    const fieldMetadata = getFieldDefinition(s.field!)!
     if (
       s.valueList === undefined &&
       fieldMetadata.options.valueList !== undefined
     )
-      s.valueList = fieldMetadata.options.valueList; //
+      s.valueList = fieldMetadata.options.valueList //
     if (s.valueList) {
       let orig = s.valueList
       if (s.valueListChangeKey) {
