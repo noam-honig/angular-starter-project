@@ -42,7 +42,7 @@ async function startup() {
       res.sendStatus(500)
     }
   })
-  let port = process.env['PORT'] || 3002
+  let port = process.env['PORT'] || 3004
   app.listen(port)
 }
 startup()

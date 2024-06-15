@@ -25,7 +25,7 @@ import { MultiSelectListDialogComponent } from './multi-select-list-dialog/multi
 
 @Injectable()
 export class UIToolsService implements UITools {
-  report(what: string, context: string, taskId?: string) {}
+  report(what: string, context: string, taskId?: string) { }
   constructor(
     zone: NgZone,
     private snackBar: MatSnackBar,
@@ -45,16 +45,17 @@ export class UIToolsService implements UITools {
     this.snackBar.open(info, 'סגור', { duration: 4000 })
   }
   async error(err: any, taskId?: string) {
+
     const message = extractError(err)
     if (message == 'Network Error') return
     this.report('שגיאה', message, taskId)
     return await openDialog(
       YesNoQuestionComponent,
       (d) =>
-        (d.args = {
-          message,
-          isAQuestion: false,
-        })
+      (d.args = {
+        message,
+        isAQuestion: false,
+      })
     )
   }
   async gridDialog(args: GridDialogArgs): Promise<void> {
@@ -147,6 +148,9 @@ export class ShowDialogOnErrorErrorHandler extends ErrorHandler {
   lastErrorString = ''
   lastErrorTime!: number
   override async handleError(error: any) {
+    // let s=JSON.stringify(error);
+    console.error(error);
+    // return;
     super.handleError(error)
     if (
       this.lastErrorString == error.toString() &&
@@ -156,6 +160,7 @@ export class ShowDialogOnErrorErrorHandler extends ErrorHandler {
     this.lastErrorString = error.toString()
     this.lastErrorTime = new Date().valueOf()
     this.zone.run(() => {
+
       this.ui.error(error)
     })
   }

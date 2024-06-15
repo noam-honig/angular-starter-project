@@ -79,9 +79,9 @@ export class AppComponent implements OnInit {
   }
 
   routeName(route: Route) {
-    let name = route.path
+    let name = route.path 
     if (route.data && route.data['name']) name = route.data['name']
-    return name
+    return name 
     return ''
   }
 
