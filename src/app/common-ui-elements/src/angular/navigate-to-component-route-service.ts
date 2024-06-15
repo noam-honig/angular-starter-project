@@ -1,9 +1,4 @@
-import {
-  Router,
-  Route,
-  CanActivate,
-  ActivatedRouteSnapshot,
-} from '@angular/router'
+import { Router, Route, ActivatedRouteSnapshot, CanActivateFn } from '@angular/router'
 import { Injectable, Injector } from '@angular/core'
 import { Remult, Allowed } from 'remult'
 @Injectable()
@@ -25,7 +20,9 @@ export class RouteHelperService {
   canNavigateToRoute(route: Route) {
     if (!route.canActivate) return true
     for (let guard of route.canActivate) {
-      let g = this.injector.get(guard) as CanActivate
+      let g = this.injector.get(guard) as {
+    canActivate: CanActivateFn;
+}
       if (g && g.canActivate) {
         var r = new dummyRoute()
         r.routeConfig = route
@@ -39,7 +36,7 @@ export class RouteHelperService {
 export declare type AngularComponent = { new (...args: any[]): any }
 // @dynamic
 @Injectable()
-export class AuthenticatedGuard implements CanActivate {
+export class AuthenticatedGuard  {
   constructor(
     protected remult: Remult,
     private router: Router,
@@ -69,7 +66,7 @@ export class AuthenticatedGuard implements CanActivate {
 }
 
 @Injectable()
-export class NotAuthenticatedGuard implements CanActivate {
+export class NotAuthenticatedGuard  {
   constructor(private remult: Remult, private router: Router) {}
   canActivate(route: ActivatedRouteSnapshot) {
     if (this.remult.authenticated()) return false
