@@ -57,7 +57,12 @@
               "src/styles.scss",
               "src/app/common-ui-elements/input-styles.scss"
             ],
-            "scripts": []
+            "scripts": [],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "node_modules/"
+              ]
+            }
           },
           "configurations": {
             "production": {

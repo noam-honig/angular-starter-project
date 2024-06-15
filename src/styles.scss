@@ -1,5 +1,7 @@
 // this code makes the font size larger than the standard
-@import '~@angular/material/theming';
+// @import '~@angular/material/theming';
+@import '/node_modules/@angular/material/theming';  //@#CHANGED@#
+// @import '~@angular/material/core/theming';
 
 // Plus imports for other components in your app.
 
@@ -27,7 +29,7 @@ $custom-typography: mat-typography-config($font-family: 'Rubik,-apple-system,Bli
 @include mat-base-typography($custom-typography);
 
 // Override typography for a specific Angular Material components.
-@include mat-checkbox-typography($custom-typography);
+// @include mat-checkbox-typography($custom-typography); //@#CHANGED@# removed becuse of an error
 
 // Override typography for all Angular Material, including mat-base-typography and all components.
 @include angular-material-typography($custom-typography);
