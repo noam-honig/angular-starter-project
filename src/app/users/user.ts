@@ -47,10 +47,11 @@ export class User extends IdEntity {
     caption: terms.admin,
   })
   admin = false
+  
   @Fields.boolean({
     allowApiUpdate: Roles.admin,
     caption: terms.disabled,
-    validate: Validators.required,
+    // validate: Validators.required,
   })
   disabled = false
 
