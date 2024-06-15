@@ -1,6 +1,6 @@
 import { Component } from '@angular/core'
 import { DataFilterInfoComponent } from '../data-filter-info/data-filter-info.component'
-import { MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog'
+import { MatDialogRef } from '@angular/material/dialog'
 
 @Component({
   templateUrl: './filter-dialog.component.html',

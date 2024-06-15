@@ -6,7 +6,7 @@ import {
   ViewContainerRef,
 } from '@angular/core'
 import { ErrorStateMatcher } from '@angular/material/core'
-import { LegacyFloatLabelType as FloatLabelType } from '@angular/material/legacy-form-field'
+import { FloatLabelType } from '@angular/material/form-field'
 import { Entity, ValueListItem, FieldMetadata, FieldRef } from 'remult'
 
 import {
