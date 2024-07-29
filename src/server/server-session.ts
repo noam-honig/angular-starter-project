@@ -17,10 +17,10 @@ export async function initRequest(req: Request) {
 
   const sessionUser = req.session!['user']
   if (!sessionUser || !sessionUser.id) return
-  const user = await repo(User).findFirst({
+  const user = (await repo(User).findFirst({
     id: sessionUser!.id,
     disabled: false,
-  })
+  }))!
   await setSessionUserBasedOnUserRow(user)
 }
 

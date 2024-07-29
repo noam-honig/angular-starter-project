@@ -33,7 +33,7 @@ export class UpdatePasswordController extends ControllerBase {
 
   @BackendMethod({ allowed: Allow.authenticated })
   async updatePassword() {
-    const user = await remult.repo(User).findId(remult.user!.id)
+    const user = (await remult.repo(User).findId(remult.user!.id))!
     await user.hashAndSetPassword(this.password)
     await user.save()
   }
