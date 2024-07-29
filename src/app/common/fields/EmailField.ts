@@ -1,17 +1,14 @@
-import { FieldRef, Fields, StringFieldOptions } from 'remult'
+import {
+  FieldRef,
+  Fields,
+  StringFieldOptions,
+  type FieldValidator,
+} from 'remult'
 
 export function EmailField<entityType>(
   options?: StringFieldOptions<entityType>
 ) {
-  const validate:
-    | ((
-        entity: entityType,
-        fieldRef: FieldRef<entityType, string>
-      ) => any | Promise<any>)
-    | ((
-        entity: entityType,
-        fieldRef: FieldRef<entityType, string>
-      ) => any | Promise<any>)[] = [
+  const validate: FieldValidator<entityType, string>[] = [
     (_, f) => {
       if (!f.value) return
       //is valid email

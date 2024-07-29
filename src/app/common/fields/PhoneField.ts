@@ -1,4 +1,9 @@
-import { FieldRef, Fields, StringFieldOptions } from 'remult'
+import {
+  FieldRef,
+  Fields,
+  StringFieldOptions,
+  type FieldValidator,
+} from 'remult'
 
 export function OnlyAllowIsraeliPhones(_: any, ref: FieldRef<any, string>) {
   if (ref.value.startsWith('+')) throw Error('רק טלפונים ישראלים נתמכים כרגע')
@@ -44,15 +49,7 @@ export const phoneConfig = {
 export function PhoneField<entityType>(
   options?: StringFieldOptions<entityType>
 ) {
-  const validate:
-    | ((
-        entity: entityType,
-        fieldRef: FieldRef<entityType, string>
-      ) => any | Promise<any>)
-    | ((
-        entity: entityType,
-        fieldRef: FieldRef<entityType, string>
-      ) => any | Promise<any>)[] = [
+  const validate: FieldValidator<entityType, string>[] = [
     (_, f) => {
       if (!f.value) return
       f.value = fixPhoneInput(f.value)

@@ -117,8 +117,8 @@ export async function recordChanges<entityType>(
   }
 }
 interface ColumnDeciderArgs<entityType> {
-  excludeColumns?: (e: FieldsRef<entityType>) => FieldRef<any>[]
-  excludeValues?: (e: FieldsRef<entityType>) => FieldRef<any>[]
+  excludeColumns?: (e: FieldsRef<entityType>) => FieldRef<entityType>[]
+  excludeValues?: (e: FieldsRef<entityType>) => FieldRef<entityType>[]
   forceDate?: Date
   forceNew?: boolean
 }
