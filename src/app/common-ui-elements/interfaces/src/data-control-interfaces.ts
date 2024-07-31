@@ -1,20 +1,20 @@
 import {
   FieldRef,
   FieldMetadata,
-  Entity,
   ValueListItem,
   Remult,
   ValueListInfo,
 } from 'remult'
 
-import { InputField } from './column-collection'
-
 export type DataControlInfo<rowType> =
   | DataControlSettings<rowType>
   | FieldRef<unknown, unknown>
-export interface DataControlSettings<entityType = any, valueType = any> {
+export interface DataControlSettings<
+  entityType = unknown,
+  valueType = unknown
+> {
   customFilter?: (select: (val: any) => void) => void
-  field?: FieldMetadata | FieldRef<any, any>
+  field?: FieldMetadata | FieldRef
   valueListItemCss?: (value: ValueListItem) => any
   getValue?: (row: entityType, val: FieldRef<entityType, valueType>) => any
   readonly?: ValueOrEntityExpression<boolean, entityType>
@@ -61,7 +61,7 @@ export declare type CustomComponentArgs<argsType = any> = {
 
 export const configDataControlField = Symbol('configDataControlField')
 
-export function getFieldDefinition(col: FieldMetadata | FieldRef<any, any>) {
+export function getFieldDefinition(col: FieldMetadata | FieldRef) {
   if (!col) return undefined
   let r = col as FieldMetadata
   let c = col as FieldRef<any, any>
@@ -69,23 +69,9 @@ export function getFieldDefinition(col: FieldMetadata | FieldRef<any, any>) {
   return r
 }
 export function decorateDataSettings(
-  colInput: FieldMetadata | FieldRef<any, any>,
+  colInput: FieldMetadata | FieldRef,
   x: DataControlSettings
 ) {
-  if (colInput instanceof InputField) {
-    //@ts-ignore
-    for (const key in colInput.dataControl) {
-      if (Object.prototype.hasOwnProperty.call(colInput.dataControl, key)) {
-        //@ts-ignore
-        const element = colInput.dataControl[key]
-        //@ts-ignore
-        if (x[key] === undefined)
-          //@ts-ignore
-          x[key] = element
-      }
-    }
-  }
-
   let col = getFieldDefinition(colInput)!
   if (col.target) {
     let settingsOnColumnLevel = Reflect.getMetadata(

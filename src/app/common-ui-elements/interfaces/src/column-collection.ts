@@ -31,7 +31,7 @@ import { decorateColumnSettings, getEntitySettings } from 'remult/internals'
 
 import { ClassType } from 'remult/classType'
 
-export class FieldCollection<rowType = any> {
+export class FieldCollection<rowType = unknown> {
   constructor(
     public currentRow: () => any,
     private allowUpdate: () => boolean,
@@ -58,7 +58,7 @@ export class FieldCollection<rowType = any> {
     if (col.visible === undefined) return true
     return this.getRowColumn({ col, row }, (c, row) => col.visible!(row, c))
   }
-  allowClick(col: DataControlSettings<any, any>, row: any) {
+  allowClick(col: DataControlSettings<unknown, any>, row: any) {
     if (!col.click) return false
     if (!this._getEditable(col, row)) return false
     if (col.allowClick === undefined) {
@@ -96,8 +96,8 @@ export class FieldCollection<rowType = any> {
     var promises: Promise<void>[] = []
     for (let c of columns) {
       if (!c) continue
-      let s: DataControlSettings<rowType>
-      let x = c as DataControlSettings<rowType>
+      let s: DataControlSettings<unknown>
+      let x = c as DataControlSettings<unknown>
       let col = c as FieldMetadata
       let ecol = c as FieldRef<any, any>
       if ((!x.field && col.valueConverter) || ecol.metadata) {
@@ -137,12 +137,12 @@ export class FieldCollection<rowType = any> {
     }
   >()
   async buildDropDown(s: DataControlSettings) {
-    const fieldMetadata = getFieldDefinition(s.field!)!;
+    const fieldMetadata = getFieldDefinition(s.field!)!
     if (
       s.valueList === undefined &&
       fieldMetadata.options.valueList !== undefined
     )
-      s.valueList = fieldMetadata.options.valueList; //
+      s.valueList = fieldMetadata.options.valueList //
     if (s.valueList) {
       let orig = s.valueList
       if (s.valueListChangeKey) {
@@ -380,114 +380,7 @@ export function valueOrEntityExpressionToValue<T, entityType>(
   return <T>f
 }
 
-export class InputField<valueType> implements FieldRef<any, valueType> {
-  private options: FieldOptions
-  dataControl: DataControlSettings
-  async validate() {
-    return true
-  }
-  constructor(
-    settings: FieldOptions<any, valueType> &
-      DataControlSettings & {
-        remult?: Remult
-      }
-  ) {
-    if (!settings.dbName) settings.dbName = settings.key
-
-    this.options = decorateColumnSettings(settings, settings.remult!)
-    this.dataControl = settings
-    if (
-      !this.dataControl.valueList &&
-      this.options.valueConverter instanceof ValueListInfo
-    ) {
-      this.dataControl.valueList = this.options.valueConverter.getValues()
-    }
-
-    if (!settings.caption) settings.caption = 'caption'
-
-    if (!settings.key) settings.key = settings.caption
-    this.inputType = settings.inputType!
-    if (settings.defaultValue) {
-      this._value = settings.defaultValue(undefined) as unknown as valueType
-    }
-
-    this.originalValue = this._value
-    let valueConverter = this.options.valueConverter
-      ? this.options.valueConverter
-      : undefined
-    if (valueConverter)
-      if (!settings.inputType) {
-        settings.inputType = valueConverter.inputType
-      }
-    this.metadata = {
-      dbName: settings.dbName || settings.key,
-      allowNull: settings.allowNull!,
-      caption: settings.caption,
-      options: this.options,
-      valueConverter: valueConverter! as any,
-      valueType: settings.valueType,
-      key: settings.key,
-      displayValue: () => '',
-      apiUpdateAllowed: () => true,
-      includedInApi: () => true,
-      toInput: (x) => x,
-      fromInput: (x) => x,
-      dbReadOnly: false,
-      inputType: settings.inputType!,
-      isServerExpression: false,
-      getDbName: async () => settings.dbName!,
-      target: undefined!,
-    }
-  }
-  subscribe(listener: RefSubscriber): Unsubscribe {
-    throw new Error('Method not implemented.')
-  }
-  valueIsNull() {
-    return this.value === null
-  }
-  originalValueIsNull() {
-    return this.originalValue === null
-  }
-  load(): Promise<valueType> {
-    throw new Error('Method not implemented.')
-  }
-  metadata: FieldMetadata
-
-  _value!: valueType
-  inputType: string
-  error!: string
-  get displayValue() {
-    if (this.options.displayValue)
-      return this.options.displayValue(this.value, undefined)
-    //@ts-ignore
-    return this.value.toString()
-  }
-  get value(): valueType {
-    return this._value
-  }
-  set value(val: valueType) {
-    this._value = val
-    if (this.dataControl.valueChange)
-      this.dataControl.valueChange(undefined, this)
-  }
-  originalValue: valueType
-  get inputValue(): string {
-    return this.metadata.valueConverter!.toInput!(this.value, this.inputType)
-  }
-  set inputValue(val: string) {
-    this.value = this.metadata.valueConverter!.fromInput!(val, this.inputType)
-  }
-  valueChanged(): boolean {
-    return this.originalValue != this.value
-  }
-  entityRef!: EntityRef<any>
-  container: any
-}
-
-function fixResult(
-  result: ValueListItem[],
-  inField: FieldMetadata | FieldRef<any, any>
-) {
+function fixResult(result: ValueListItem[], inField: FieldMetadata | FieldRef) {
   let field = getFieldDefinition(inField)
   if (field?.valueType === Number) {
     result.splice(

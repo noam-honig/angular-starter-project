@@ -21,7 +21,7 @@ import {
 import { DataList } from './dataList'
 import { FilterHelper } from './filter-helper'
 
-export class GridSettings<rowType = any> {
+export class GridSettings<rowType = unknown> {
   addNewRowToGrid(v: rowType) {
     setTimeout(() => {
       const refId = getEntityRef(v).getId()
@@ -625,11 +625,11 @@ export function sortColumns(
   list.columns.numOfColumnsInGrid = columns.length
   for (let index = 0; index < columns.length; index++) {
     const origItem = columns[index]
-    let item: DataControlSettings<any>
-    let defs = origItem as FieldMetadata<any>
+    let item: DataControlSettings
+    let defs = origItem as FieldMetadata
     if (defs && defs.valueType) {
       item = list.columns.items.find((x) => x.field == defs)!
-    } else item = origItem as DataControlSettings<any>
+    } else item = origItem as DataControlSettings
     let origIndex = list.columns.items.indexOf(item)
     list.columns.moveCol(item, -origIndex + index)
   }

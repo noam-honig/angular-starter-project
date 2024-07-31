@@ -25,14 +25,14 @@ import { InputAddressResult } from '../UITools'
 export class AddressInputComponent
   implements AfterViewInit, CustomDataComponent
 {
-  @Input() field!: FieldRef<any, string>
+  @Input() field!: FieldRef<unknown, string>
   @Input() autoInit: boolean = false
   @Input() caption!: string
 
   onSelect?: (result: InputAddressResult) => void
   constructor(private zone: NgZone) {}
   set args(value: CustomComponentArgs) {
-    this.field = value.fieldRef
+    this.field = value.fieldRef as FieldRef<unknown, string>
     if (value.settings.caption) this.caption = value.settings.caption
     if (value.args) {
       this.onSelect = (result) => {
