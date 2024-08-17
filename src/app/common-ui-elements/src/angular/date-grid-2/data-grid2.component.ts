@@ -117,7 +117,7 @@ export class DataGrid2Component implements OnChanges, OnDestroy {
   @Input() displayButtons = true
   @Input() displayVCR = true
 
-  @Input() settings!: GridSettings
+  @Input() settings!: GridSettings<any>
   prevSettings?: GridSettings
 
   getAreaSettings() {
