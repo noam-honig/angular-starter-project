@@ -23,9 +23,9 @@ import { CommonUIElementsPluginsService } from '../CommonUIElementsPluginsServic
   templateUrl: './data-control2.component.html',
   styleUrls: ['./data-control2.component.scss'],
 })
-export class DataControl2Component {
+export class DataControl2Component<T> {
   @Input() map!: DataControlSettings
-  @Input() set field(value: FieldMetadata | FieldRef<any, any>) {
+  @Input() set field(value: FieldMetadata | FieldRef) {
     this.map = {
       field: value,
     }
@@ -70,7 +70,7 @@ export class DataControl2Component {
 
   @Input() record: any
   @Input() notReadonly = false
-  @Input() settings: FieldCollection = new FieldCollection(
+  @Input() settings: FieldCollection<T> = new FieldCollection(
     undefined!,
     () => true,
     undefined!,
@@ -147,7 +147,7 @@ export class DataControl2Component {
     this.settings.checkValueListChange()
   }
   ngErrorStateMatches = new (class extends ErrorStateMatcher {
-    constructor(public parent: DataControl2Component) {
+    constructor(public parent: DataControl2Component<T>) {
       super()
     }
     override isErrorState() {

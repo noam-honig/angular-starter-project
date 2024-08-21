@@ -28,7 +28,8 @@ import { TextAreaDataControlComponent } from './common/textarea-data-control/tex
 import { DotsMenuComponent } from './common/dot-menu.component'
 import { AddressInputComponent } from './common/address-input/address-input.component'
 import { MultiSelectListDialogComponent } from './common/multi-select-list-dialog/multi-select-list-dialog.component'
-import { InputImageComponent } from './common/input-image/input-image.component'
+import { InputImageComponent } from './common/input-image/input-image.component';
+import { DemoDataControlAndDataAreaComponent } from './demo-data-control-and-data-area/demo-data-control-and-data-area.component'
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { InputImageComponent } from './common/input-image/input-image.component'
     DotsMenuComponent,
     MultiSelectListDialogComponent,
     InputImageComponent,
+    DemoDataControlAndDataAreaComponent,
   ],
   imports: [
     BrowserModule,

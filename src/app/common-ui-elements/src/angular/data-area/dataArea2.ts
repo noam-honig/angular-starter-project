@@ -15,13 +15,13 @@ import { CommonUIElementsPluginsService } from '../CommonUIElementsPluginsServic
   styleUrls: ['./dataArea2.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class DataArea2Component implements OnChanges {
+export class DataArea2Component<T> implements OnChanges {
   constructor(
     private remult: Remult,
     private plugin: CommonUIElementsPluginsService
   ) {}
 
-  @Input() settings: DataAreaSettings = {
+  @Input() settings: DataAreaSettings<T> = {
     fields: new FieldCollection(
       () => undefined,
       () => false,

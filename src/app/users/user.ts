@@ -13,12 +13,13 @@ import { Roles } from './roles'
 import { terms } from '../terms'
 
 @Entity<User>('Users', {
-  allowApiRead: Allow.authenticated,
-  allowApiUpdate: Allow.authenticated,
-  allowApiDelete: false,
-  allowApiInsert: Roles.admin,
-  apiPrefilter: () =>
-    !remult.isAllowed(Roles.admin) ? { id: [remult.user?.id!] } : {},
+  allowApiCrud: true,
+  // allowApiRead: Allow.authenticated,
+  // allowApiUpdate: Allow.authenticated,
+  // allowApiDelete: false,
+  // allowApiInsert: Roles.admin,
+  // apiPrefilter: () =>
+  //   !remult.isAllowed(Roles.admin) ? { id: [remult.user?.id!] } : {},
   saving: async (user) => {
     if (isBackend()) {
       if (user._.isNew()) {

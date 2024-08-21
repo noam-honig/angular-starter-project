@@ -7,6 +7,7 @@ import { UsersComponent } from './users/users.component'
 import { AdminGuard } from './users/AdminGuard'
 import { ShowDialogOnErrorErrorHandler } from './common/UIToolsService'
 import { terms } from './terms'
+import { DemoDataControlAndDataAreaComponent } from './demo-data-control-and-data-area/demo-data-control-and-data-area.component'
 
 const defaultRoute = terms.home
 const routes: Routes = [
@@ -16,6 +17,7 @@ const routes: Routes = [
     component: UsersComponent,
     canActivate: [AdminGuard],
   },
+  { path: 'demo', component: DemoDataControlAndDataAreaComponent },
   { path: '**', redirectTo: '/' + defaultRoute, pathMatch: 'full' },
 ]
 
