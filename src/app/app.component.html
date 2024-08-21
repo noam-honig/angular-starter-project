@@ -5,7 +5,7 @@
     </button>
     <span class="toolbar-title">{{ currentTitle() }}</span>
     <ng-container *ngIf="!remult.authenticated()">
-      <button mat-flat-button color="primary" (click)="signIn()">
+      <button mat-stroked-button color="primary" (click)="signIn()">
         {{ terms.signIn }}
       </button>
     </ng-container>

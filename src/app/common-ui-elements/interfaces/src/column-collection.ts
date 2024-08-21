@@ -29,8 +29,6 @@ import {
 import { FilterHelper } from './filter-helper'
 import { decorateColumnSettings, getEntitySettings } from 'remult/internals'
 
-import { ClassType } from 'remult/classType'
-
 export class FieldCollection<rowType = unknown> {
   constructor(
     public currentRow: () => any,

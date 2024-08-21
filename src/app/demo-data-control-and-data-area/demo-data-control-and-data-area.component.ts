@@ -11,19 +11,22 @@ const genders = ['male', 'female'] as const
   styleUrls: ['./demo-data-control-and-data-area.component.scss'],
 })
 export class DemoDataControlAndDataAreaComponent {
+  ui = inject(UIToolsService);
+
   @Fields.string()
-  name = ''
+  name = '';
   @Fields.number<DemoDataControlAndDataAreaComponent>()
-  code = 0
+  code = 0;
   @Fields.boolean()
-  isOk = false
+  isOk = false;
   @Fields.dateOnly()
-  today = new Date()
+  today = new Date();
   @Fields.literal(() => genders)
-  gender = 'male'
-
-  ui = inject(UIToolsService)
-
+  gender = 'male';
+  @Fields.string({
+    customInput: (x) => x.textarea(),
+  })
+  comment = '';
   area: DataAreaSettings<DemoDataControlAndDataAreaComponent> =
     new DataAreaSettings({
       fields: () => [
@@ -45,12 +48,14 @@ export class DemoDataControlAndDataAreaComponent {
         {
           field: this.$.name,
           click: async () => {
-            if (await this.ui.yesNoQuestion('Clear name value?')) this.name = ''
+            if (await this.ui.yesNoQuestion('Clear name value?'))
+              this.name = '';
           },
         },
+        this.$.comment,
       ],
-    })
+    });
   get $() {
-    return getFields<DemoDataControlAndDataAreaComponent>(this)
+    return getFields<DemoDataControlAndDataAreaComponent>(this);
   }
 }

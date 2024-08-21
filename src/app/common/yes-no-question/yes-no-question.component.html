@@ -1,5 +1,5 @@
 <div>
-  <h3 matDialogHeader>{{ args.message }}</h3>
+  <h3 mat-dialog-title>{{ args.message }}</h3>
 
   <mat-dialog-actions>
     <button
@@ -11,7 +11,7 @@
       {{ terms.no }}
     </button>
     <button
-      mat-raised-button
+      mat-flat-button
       color="primary"
       (click)="close()"
       *ngIf="!args.isAQuestion"
@@ -19,7 +19,7 @@
       {{ terms.ok }}
     </button>
     <button
-      mat-raised-button
+      mat-flat-button
       color="primary"
       (click)="select()"
       *ngIf="args.isAQuestion"
