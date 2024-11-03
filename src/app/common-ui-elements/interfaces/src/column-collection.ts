@@ -35,20 +35,17 @@ export class FieldCollection<rowType = unknown> {
     private allowUpdate: () => boolean,
     public filterHelper: FilterHelper<rowType>,
     private showArea: () => boolean,
-    private _getRowColumn: (
-      row: rowType,
-      col: FieldMetadata
-    ) => FieldRef<any, any>
+    private _getRowColumn: (row: rowType, col: FieldMetadata) => FieldRef
   ) {}
   __showArea() {
     return this.showArea()
   }
   __getColumn(map: DataControlSettings, record: any) {
     if (!map.field) return undefined
-    let result: FieldRef<any, any> | undefined = undefined
+    let result: FieldRef | undefined = undefined
     if (record)
       result = getEntityRef(record).fields.find(getFieldDefinition(map.field)!)
-    if (!result) result = map.field as unknown as FieldRef<any, any>
+    if (!result) result = map.field as unknown as FieldRef
     return result
   }
 
@@ -56,7 +53,7 @@ export class FieldCollection<rowType = unknown> {
     if (col.visible === undefined) return true
     return this.getRowColumn({ col, row }, (c, row) => col.visible!(row, c))
   }
-  allowClick(col: DataControlSettings<unknown, any>, row: any) {
+  allowClick(col: DataControlSettings, row: any) {
     if (!col.click) return false
     if (!this._getEditable(col, row)) return false
     if (col.allowClick === undefined) {
@@ -66,14 +63,14 @@ export class FieldCollection<rowType = unknown> {
   }
   getRowColumn<T>(
     args: { col: DataControlSettings<any>; row: any },
-    what: (c: FieldRef<any, any>, row: any) => T
+    what: (c: FieldRef, row: any) => T
   ) {
-    let field: FieldRef<any, any> | undefined = undefined
+    let field: FieldRef | undefined = undefined
     let row = args.row
     if (this._getRowColumn! && args.col.field && row) {
       field = this._getRowColumn(row, getFieldDefinition(args.col.field)!)
     }
-    if (!field) field = args.col.field as unknown as FieldRef<any, any>
+    if (!field) field = args.col.field as unknown as FieldRef
     if (!row && field) row = field.container
     return what(field, row)
   }
@@ -97,7 +94,7 @@ export class FieldCollection<rowType = unknown> {
       let s: DataControlSettings<unknown>
       let x = c as DataControlSettings<unknown>
       let col = c as FieldMetadata
-      let ecol = c as FieldRef<any, any>
+      let ecol = c as FieldRef
       if ((!x.field && col.valueConverter) || ecol.metadata) {
         x = {
           field: c,
@@ -389,17 +386,30 @@ function fixResult(result: ValueListItem[], inField: FieldMetadata | FieldRef) {
   }
 }
 
+const entityValueListCache = new Map<string, Promise<ExtendedValueListItem[]>>()
+export function clearEntityValueListCache() {
+  entityValueListCache.clear()
+}
+
 /** returns an array of values that can be used in the value list property of a data control object */
 
-export async function getEntityValueList<T>(
+export function getEntityValueList<T>(
   repository: Repository<T>,
   args?: {
     idField?: (e: EntityMetadata<T>) => FieldMetadata
     captionField?: (e: EntityMetadata<T>) => FieldMetadata
     orderBy?: EntityOrderBy<T>
     where?: EntityFilter<T>
+    cache?: boolean
   }
 ): Promise<ExtendedValueListItem[]> {
+  let r: Promise<ExtendedValueListItem[]> | undefined
+  if (args?.cache) {
+    r = entityValueListCache.get(repository.metadata.key)
+    if (r) {
+      return r
+    }
+  }
   if (!args) {
     args = {}
   }
@@ -415,23 +425,28 @@ export async function getEntityValueList<T>(
       }
     }
   }
-  let r = (
-    await repository.find({
+  r = repository
+    .find({
       where: args.where,
       orderBy: args.orderBy,
       limit: 1000,
     })
-  ).map((x) => {
-    return {
-      id: repository
-        .getEntityRef(x)
-        .fields.find(args!.idField!(repository.metadata)).value,
-      caption: repository
-        .getEntityRef(x)
-        .fields.find(args!.captionField!(repository.metadata)).value,
-      entity: x,
-    }
-  })
+    .then((r) => {
+      if (args?.cache) {
+      }
+      return r.map((x) => {
+        return {
+          id: repository
+            .getEntityRef(x)
+            .fields.find(args!.idField!(repository.metadata)).value,
+          caption: repository
+            .getEntityRef(x)
+            .fields.find(args!.captionField!(repository.metadata)).value,
+          entity: x,
+        }
+      })
+    })
+  if (args?.cache) entityValueListCache.set(repository.metadata.key, r)
   return r
 }
 export interface ExtendedValueListItem extends ValueListItem {

@@ -6,9 +6,9 @@ import {
   ValueListInfo,
 } from 'remult'
 
-export type DataControlInfo<rowType> =
+export type DataControlInfo<rowType = unknown> =
   | DataControlSettings<rowType>
-  | FieldRef<unknown, unknown>
+  | FieldRef
 export interface DataControlSettings<
   entityType = unknown,
   valueType = unknown
@@ -42,7 +42,7 @@ export interface DataControlSettings<
   inputType?: string //used: password,date,tel,text,checkbox,number
   hideDataOnInput?: boolean //consider also setting the width of the data on input - for datas with long input
   useContainsFilter?: boolean
-
+  storeColumnInfoKey?: string
   width?: string
   customComponent?: {
     component: any
@@ -50,10 +50,10 @@ export interface DataControlSettings<
   }
 }
 
-export interface CustomDataComponent<argsType = any> {
+export interface CustomDataComponent<argsType = unknown> {
   args: CustomComponentArgs<argsType>
 }
-export declare type CustomComponentArgs<argsType = any> = {
+export declare type CustomComponentArgs<argsType = unknown> = {
   fieldRef: FieldRef
   settings: DataControlSettings
   args?: argsType
@@ -64,7 +64,7 @@ export const configDataControlField = Symbol('configDataControlField')
 export function getFieldDefinition(col: FieldMetadata | FieldRef) {
   if (!col) return undefined
   let r = col as FieldMetadata
-  let c = col as FieldRef<any, any>
+  let c = col as FieldRef
   if (c.metadata) r = c.metadata
   return r
 }
@@ -131,7 +131,7 @@ export declare type ValueOrEntityExpression<valueType, entityType> =
   | valueType
   | ((e: entityType) => valueType)
 
-export function DataControl<entityType = any, colType = any>(
+export function DataControl<entityType = unknown, colType = unknown>(
   settings: DataControlSettings<entityType, colType>
 ) {
   return (target: any, key?: string) => {

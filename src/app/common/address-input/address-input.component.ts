@@ -36,7 +36,7 @@ export class AddressInputComponent
     if (value.settings.caption) this.caption = value.settings.caption
     if (value.args) {
       this.onSelect = (result) => {
-        value.args(result, value.fieldRef.container)
+        ;(value.args as any)(result, value.fieldRef.container)
       }
     }
     this.autoInit = true

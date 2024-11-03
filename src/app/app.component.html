@@ -5,12 +5,16 @@
     </button>
     <span class="toolbar-title">{{ currentTitle() }}</span>
     <ng-container *ngIf="!remult.authenticated()">
-      <button mat-stroked-button color="primary" (click)="signIn()">
+      <button mat-stroked-button class="toolbar-button" (click)="signIn()">
         {{ terms.signIn }}
       </button>
     </ng-container>
     <ng-container *ngIf="remult.authenticated()">
-      <button mat-flat-button color="primary" [matMenuTriggerFor]="menu">
+      <button
+        mat-stroked-button
+        class="toolbar-button"
+        [matMenuTriggerFor]="menu"
+      >
         {{ remult.user!.name }}
       </button>
       <mat-menu #menu="matMenu">
@@ -32,19 +36,20 @@
       [mode]="uiService.isScreenSmall() ? 'over' : 'side'"
     >
       <div style="width: 100%; text-align: center"></div>
-      <h4 *ngIf="remult.authenticated()">
+      <h3 *ngIf="remult.authenticated()">
         {{ terms.hello }} {{ remult.user!.name }}
-      </h4>
+      </h3>
       <mat-nav-list role="list">
         <ng-container *ngFor="let m of router.config">
-          <mat-list-item
+          <a
+            mat-list-item
             *ngIf="shouldDisplayRoute(m)"
             routerLinkActive="active-route"
+            [routerLink]="m.path"
+            (click)="routeClicked()"
           >
-            <a matLine [routerLink]="m.path" (click)="routeClicked()">{{
-              routeName(m)
-            }}</a>
-          </mat-list-item>
+            {{ routeName(m) }}
+          </a>
         </ng-container>
       </mat-nav-list>
     </mat-sidenav>

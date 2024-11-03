@@ -4,6 +4,8 @@ import {
   Input,
   ViewChild,
   ViewContainerRef,
+  OnChanges,
+  ComponentRef,
 } from '@angular/core'
 import { ErrorStateMatcher } from '@angular/material/core'
 import { FloatLabelType } from '@angular/material/form-field'
@@ -23,7 +25,7 @@ import { CommonUIElementsPluginsService } from '../CommonUIElementsPluginsServic
   templateUrl: './data-control2.component.html',
   styleUrls: ['./data-control2.component.scss'],
 })
-export class DataControl2Component<T> {
+export class DataControl2Component<T> implements OnChanges {
   @Input() map!: DataControlSettings
   @Input() set field(value: FieldMetadata | FieldRef) {
     this.map = {
@@ -40,30 +42,30 @@ export class DataControl2Component<T> {
   @ViewChild('theId', { read: ViewContainerRef, static: true })
   theId!: ViewContainerRef
   done = false
+  componentRef?: ComponentRef<CustomDataComponent<any>>
   initCustomComponent() {
     if (this.map?.customComponent?.component) {
-      if (this.done) return
-      const fieldRef = this.map.field as FieldRef
-      if (!fieldRef.metadata) {
-        this.map.customComponent = undefined
-        return
+      if (!this.done) {
+        this.done = true
+        const componentFactory =
+          this.componentFactoryResolver.resolveComponentFactory<CustomDataComponent>(
+            this.map.customComponent.component
+          )
+
+        const viewContainerRef = this.theId
+        viewContainerRef.clear()
+
+        this.componentRef =
+          viewContainerRef.createComponent<CustomDataComponent>(
+            componentFactory
+          )
       }
-      this.done = true
-      const componentFactory =
-        this.componentFactoryResolver.resolveComponentFactory<CustomDataComponent>(
-          this.map.customComponent.component
-        )
-
-      const viewContainerRef = this.theId
-      viewContainerRef.clear()
-
-      const componentRef =
-        viewContainerRef.createComponent<CustomDataComponent>(componentFactory)
-
-      componentRef.instance.args = {
-        fieldRef,
-        settings: this.map,
-        args: this.map.customComponent.args,
+      if (this.componentRef) {
+        this.componentRef.instance.args = {
+          fieldRef: this._getColumn() as FieldRef,
+          settings: this.map,
+          args: this.map.customComponent.args,
+        }
       }
     }
   }

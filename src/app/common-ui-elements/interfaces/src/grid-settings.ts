@@ -21,6 +21,8 @@ import {
 import { DataList } from './dataList'
 import { FilterHelper } from './filter-helper'
 
+const rowChangedKey = Symbol('rowChanged')
+
 export class GridSettings<rowType = unknown> {
   addNewRowToGrid(v: rowType) {
     setTimeout(() => {
@@ -31,6 +33,11 @@ export class GridSettings<rowType = unknown> {
       if (index >= 0) this.items.splice(index, 1)
       this.items.splice(0, 0, v)
     }, 300)
+  }
+  addNewRow() {
+    let r: any = this.restList.add()
+    if (this.onNewRow) this.onNewRow(r)
+    this.setCurrentRow(r)
   }
   undoChanges(r: rowType) {
     let helper = this.getRowHelper(r)
@@ -151,12 +158,6 @@ export class GridSettings<rowType = unknown> {
     this.columns.numOfColumnsInGrid--
   }
 
-  addNewRow() {
-    let r: any = this.restList.add()
-    if (this.onNewRow) this.onNewRow(r)
-    this.setCurrentRow(r)
-  }
-
   noam!: string
 
   addArea(settings: IDataAreaSettings<rowType>) {
@@ -248,6 +249,23 @@ export class GridSettings<rowType = unknown> {
       this.currentRowAsRestListItemRow() &&
       this.currentRowAsRestListItemRow()!.wasChanged()
     )
+  }
+  wasThereAChangeToTheRow(row: any) {
+    let result = row[rowChangedKey]
+    if (result == undefined) {
+      const helper = this.getRowHelper(row)
+      helper.subscribe({
+        reportObserved: () => {},
+        reportChanged: () => {
+          row[rowChangedKey] = -1
+        },
+      })
+      result = row[rowChangedKey] = -1
+    }
+    if (result == -1) {
+      row[rowChangedKey] = result = this.getRowHelper(row).wasChanged() ? 1 : 0
+    }
+    return result == 1
   }
   saveCurrentRow() {
     this.saveRow(this.currentRow)
@@ -437,12 +455,15 @@ export class GridSettings<rowType = unknown> {
         return this.restList
       })
       if (this.settings && !(this.settings.knowTotalRows === false)) {
-        this.restList.count(opt.where).then((x) => {
-          this.totalRows = x
-        })
+        this.refreshCount = () =>
+          this.restList.count(opt.where).then((x) => {
+            this.totalRows = x
+          })
+        this.refreshCount()
       }
     })
   }
+  refreshCount = () => {}
 
   restList: DataList<rowType>
   async _internalBuildFindOptions() {
