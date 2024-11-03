@@ -25,9 +25,9 @@ async function startup() {
 
   app.use(api)
 
-  let dist = path.resolve('dist/angular-starter-project')
+  let dist = path.resolve('dist/angular-starter-project/browser')
   if (!fs.existsSync(dist)) {
-    dist = path.resolve('../angular-starter-project')
+    dist = path.resolve('../angular-starter-project/browser')
   }
   app.use(express.static(dist))
   app.use('/*', async (req, res) => {
