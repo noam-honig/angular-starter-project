@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "scripts": {
     "dev-web": "ng serve --proxy-config proxy.conf.json --open",
-    "dev-api": "tsx watch src/server/",
-    "dev": "concurrently \"npm:dev-api\" \"npm:dev-web\" -k -n \"API,WEB\" -c \"bgBlue.bold,bgGreen.bold\" ",
+    "dev-node": "tsx watch --env-file=.env   src/server/",
+    "dev": "concurrently \"npm:dev-node\" \"npm:dev-web\" -k -n \"API,WEB\" -c \"bgBlue.bold,bgGreen.bold\" ",
     "ng": "ng",
     "start": "tsx src/server/",
     "build": "ng build && tsc -p tsconfig.server.json",
@@ -27,7 +27,6 @@
     "@types/node-fetch": "^2.6.6",
     "compression": "^1.7.4",
     "cookie-session": "^2.0.0",
-    "dotenv": "^8.1.0",
     "express": "^4.18.1",
     "googlemaps": "^1.12.0",
     "helmet": "^5.1.1",

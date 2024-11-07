@@ -5,13 +5,21 @@ import {
   ControllerBase,
   Fields,
   remult,
+  repo,
   UserInfo,
   Validators,
 } from 'remult'
 import { terms } from '../terms'
 import { Roles } from './roles'
 import { User } from './user'
-import { setSessionUser } from '../../server/server-session'
+import type express from 'express'
+import type from 'cookie-session'
+
+declare module 'remult' {
+  export interface RemultContext {
+    request?: express.Request
+  }
+}
 
 @Controller('signIn')
 export class SignInController extends ControllerBase {
@@ -35,7 +43,7 @@ export class SignInController extends ControllerBase {
    */
   async signIn() {
     let result: UserInfo | undefined
-    const userRepo = remult.repo(User)
+    const userRepo = repo(User)
     let u = await userRepo.findFirst({ name: this.user })
     if (!u) {
       if ((await userRepo.count()) === 0) {
@@ -54,28 +62,44 @@ export class SignInController extends ControllerBase {
       }
 
       if (await u.passwordMatches(this.password)) {
-        result = {
-          id: u.id,
-          roles: [],
-          name: u.name,
-        }
-        if (u.admin) {
-          result.roles!.push(Roles.admin)
-        }
+        return setSessionUserBasedOnUserRow(u)
       }
-    }
-
-    if (result) {
-      return setSessionUser(result)
     }
     throw new Error(terms.invalidSignIn)
   }
   @BackendMethod({ allowed: Allow.authenticated })
   static signOut() {
-    setSessionUser(undefined!)
+    setSessionUserBasedOnUserRow(undefined!)
   }
-  @BackendMethod({ allowed: true })
-  static currentUser() {
-    return remult.user
+}
+
+export async function setSessionUserBasedOnUserRow(user?: User) {
+  if (!user) {
+    if (remult.context.request?.session) {
+      remult.context.request.session['user'] = undefined!
+    }
+    return undefined
   }
+  const roles: string[] = []
+
+  if (user.admin) {
+    roles.push(Roles.admin)
+  }
+  const userInfo: UserInfo = { id: user.id, name: user.name, roles }
+  if (remult.context.request?.session) {
+    const current = remult.context.request.session['user']
+    if (JSON.stringify(userInfo) != JSON.stringify(current))
+      remult.context.request.session['user'] = userInfo
+  }
+  return userInfo
+}
+
+export async function getUser(req: express.Request) {
+  const sessionUser = req.session?.['user']
+  if (!sessionUser || !sessionUser.id) return
+  const user = await repo(User).findFirst({
+    id: sessionUser!.id,
+    disabled: false,
+  })
+  return await setSessionUserBasedOnUserRow(user)
 }

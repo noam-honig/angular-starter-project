@@ -74,7 +74,7 @@ export class AppModule {}
 
 export function initApp() {
   const loadCurrentUserBeforeAppStarts = async () => {
-    remult.user = await SignInController.currentUser()
+    await remult.initUser()
   }
   return loadCurrentUserBeforeAppStarts
 }

@@ -11,7 +11,7 @@ export const entities = [User]
 export const api = remultExpress({
   controllers: [SignInController, UpdatePasswordController],
   entities,
-  initRequest,
+  getUser,
   dataProvider: async () => {
     if (process.env['NODE_ENV'] === 'production')
       return createPostgresConnection({ configuration: 'heroku' })
